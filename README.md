@@ -173,6 +173,9 @@ agentur-leads report --notion --veroeffentlichen --mit-seite
   Besucher, sofern Google genug Daten hat.
 - **Notion-Export als Quelle:** `--leads export.json` liest auch flache Board-Zeilen
   (Spalten wie im Board, dazu `url` der Seite), z. B. aus einem Export.
+- **Ohne `NOTION_TOKEN`:** `scripts/gesamtlauf.py` erzeugt die Berichte für einen
+  Board-Export nach Potenzial sortiert, `scripts/connector_upload.py` hilft beim
+  Anhängen der PDFs über den Notion-Connector (Ablauf im Docstring).
 - **KI-Stichprobe:** drei Fragen je Lead mit je bis zu zwei Websuchen. Die
   Websuche kostet 10 $ pro 1.000 Suchen, dazu kommen Tokens, grob 0,10–0,40 $
   je Lead mit dem Standardmodell (`KI_SUCHE_MODELL`, Standard `claude-opus-5-5`).
