@@ -10,6 +10,7 @@ import datetime as dt
 import json
 import logging
 import re
+import time
 from collections import deque
 from dataclasses import asdict, dataclass, field
 from urllib import robotparser
@@ -21,11 +22,11 @@ from bs4 import BeautifulSoup
 from ..audit.website import analyse_html
 from ..http import PoliteSession
 from ..models import WebsiteAudit
-from .modelle import registrierte_domain
+from .modelle import KI_SUCHE_BOTS, KI_TRAINING_BOTS, registrierte_domain
 
 log = logging.getLogger(__name__)
 
-KI_BOTS = ["GPTBot", "OAI-SearchBot", "ClaudeBot", "Claude-SearchBot", "PerplexityBot", "Google-Extended"]
+KI_BOTS = KI_SUCHE_BOTS + KI_TRAINING_BOTS
 # Sicherheitsupdates laut php.net/supported-versions (Ende des Security-Supports)
 PHP_EOL = {
     "5": "2018-12-31", "7.0": "2019-01-10", "7.1": "2019-12-01", "7.2": "2020-11-30", "7.3": "2021-12-06",
@@ -328,14 +329,22 @@ def robots_und_ki(http: PoliteSession, website_url: str) -> dict:
     rl = _abrufen(http, basis + "/llms.txt")
     info["llms_txt"] = (not isinstance(rl, str) and rl.status_code == 200
                         and "html" not in rl.headers.get("Content-Type", "").lower() and len(rl.text.strip()) > 20)
-    # Blockiert der Server KI-Crawler schon am User-Agent (z.B. Bot-Schutz)? Je ein Abruf.
-    for bot, ua in (("GPTBot", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)"),
+    # Blockiert der Server KI-Crawler schon am User-Agent (z.B. Bot-Schutz)? Je ein Abruf; bei 429/503
+    # (Drosselung, oft nur wegen unserer vorherigen Abrufe) nach einer Pause ein zweiter Versuch.
+    for bot, ua in (("OAI-SearchBot", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot"),
+                    ("GPTBot", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)"),
                     ("ClaudeBot", "Mozilla/5.0 (compatible; ClaudeBot/1.0; +claudebot@anthropic.com)")):
-        try:
-            rb = http.session.get(website_url, headers={"User-Agent": ua}, timeout=http.timeout_s)
-            info["ua_test"][bot] = rb.status_code
-        except requests.RequestException as e:
-            info["ua_test"][bot] = type(e).__name__
+        for versuch in range(2):
+            if versuch:
+                time.sleep(5 if http.delay_s else 0)
+            http._wait_for_host(p.netloc)
+            try:
+                status = http.session.get(website_url, headers={"User-Agent": ua}, timeout=http.timeout_s).status_code
+            except requests.RequestException as e:
+                status = type(e).__name__
+            info["ua_test"][bot] = status
+            if status not in (429, 503):
+                break
     return info
 
 

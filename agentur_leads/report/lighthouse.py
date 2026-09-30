@@ -12,6 +12,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import threading
 from pathlib import Path
 
 import requests
@@ -97,32 +98,45 @@ def _chrome_pfad() -> str:
     return _CHROME["p"]
 
 
+# Lokale Läufe nacheinander: parallele Chrome-Instanzen verfälschen die Leistungswerte und brechen teils ab.
+_SPERRE = threading.Lock()
+
+
+def _ein_lauf(exe: str, chrome: str, url: str, strategie: str, timeout: float) -> dict | None:
+    flags = " ".join(["--headless=new", "--no-sandbox", "--disable-dev-shm-usage", *proxy_args()])
+    with tempfile.TemporaryDirectory() as tmp:
+        ziel = Path(tmp) / "lh.json"
+        cmd = [exe, url, "--quiet", "--locale=de", "--output=json", f"--output-path={ziel}",
+               f"--chrome-flags={flags}", "--max-wait-for-load=60000"]
+        if strategie == "desktop":
+            cmd.append("--preset=desktop")
+        try:
+            subprocess.run(cmd, env={**os.environ, "CHROME_PATH": chrome}, timeout=timeout,
+                           capture_output=True, check=False)
+            return auswerten(json.loads(ziel.read_text(encoding="utf-8")))
+        except (subprocess.TimeoutExpired, OSError, ValueError) as e:
+            log.warning("Lighthouse (%s) für %s fehlgeschlagen: %s", strategie, url, e)
+            return None
+
+
+def _gueltig(e: dict | None) -> bool:
+    return bool(e and e.get("scores") and not e.get("laufzeitfehler"))
+
+
 def lokal(url: str, strategie: str, laeufe: int = 1, timeout: float = 240) -> dict:
     exe, chrome = shutil.which("lighthouse"), _chrome_pfad()
     if not exe or not chrome:
         return {"fehler": "Lighthouse-CLI oder Chrome nicht gefunden"}
-    flags = " ".join(["--headless=new", "--no-sandbox", "--disable-dev-shm-usage", *proxy_args()])
-    ergebnisse = []
-    for _ in range(max(1, laeufe)):
-        with tempfile.TemporaryDirectory() as tmp:
-            ziel = Path(tmp) / "lh.json"
-            cmd = [exe, url, "--quiet", "--locale=de", "--output=json", f"--output-path={ziel}",
-                   f"--chrome-flags={flags}", "--max-wait-for-load=60000"]
-            if strategie == "desktop":
-                cmd.append("--preset=desktop")
-            try:
-                subprocess.run(cmd, env={**os.environ, "CHROME_PATH": chrome}, timeout=timeout,
-                               capture_output=True, check=False)
-                ergebnisse.append(auswerten(json.loads(ziel.read_text(encoding="utf-8"))))
-            except (subprocess.TimeoutExpired, OSError, ValueError) as e:
-                log.warning("Lighthouse (%s) für %s fehlgeschlagen: %s", strategie, url, e)
-    gueltig = [e for e in ergebnisse if e.get("scores") and not e.get("laufzeitfehler")]
+    with _SPERRE:
+        ergebnisse = [_ein_lauf(exe, chrome, url, strategie, timeout) for _ in range(max(1, laeufe))]
+        if not any(map(_gueltig, ergebnisse)):  # ein zweiter Versuch, z. B. nach Zeitüberschreitung
+            ergebnisse.append(_ein_lauf(exe, chrome, url, strategie, timeout))
+    gueltig = sorted(filter(_gueltig, ergebnisse), key=lambda e: e["scores"].get("performance", 0))
     if not gueltig:
         return {"fehler": "Lighthouse lieferte kein Ergebnis"}
-    gueltig.sort(key=lambda e: e["scores"].get("performance", 0))
     median = gueltig[len(gueltig) // 2]
     median["quelle"] = "lokal gemessen"
-    median["laeufe"] = [e["scores"].get("performance") for e in ergebnisse if e.get("scores")]
+    median["laeufe"] = [e["scores"].get("performance") for e in gueltig]
     return median
 
 

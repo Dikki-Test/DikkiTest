@@ -16,6 +16,11 @@ BEAUTY = "Beauty"
 FITNESS = "Fitness"
 DIENSTLEISTUNG = "Dienstleistung"
 
+# KI-Crawler: Such-/Abrufdienste entscheiden, ob ChatGPT & Co. eine Seite in Antworten nutzen können;
+# Trainings-Crawler sammeln nur Trainingsdaten – sie auszusperren ist eine legitime Entscheidung.
+KI_SUCHE_BOTS = ("OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot")
+KI_TRAINING_BOTS = ("GPTBot", "ClaudeBot", "Google-Extended", "CCBot")
+
 
 @dataclass
 class ReportLead:

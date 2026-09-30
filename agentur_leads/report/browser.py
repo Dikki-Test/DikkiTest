@@ -110,7 +110,11 @@ def browser_messung(website_url: str, ordner: Path, unterseiten: list[str] | Non
                     info["cookies_dritt"] = sorted({f"{c['domain']}:{c['name']}" for c in ctx.cookies()
                                                     if not c["domain"].lstrip(".").endswith(domain)})
                     if page.url.startswith("https://"):
-                        info["unverschluesselt"] = sorted({a for a in anfragen if a.startswith("http://")})[:30]
+                        # Chrome stuft http://-Bilder selbst auf https hoch – daher auch im Quelltext nachsehen
+                        im_dom = page.evaluate("""() => [...document.querySelectorAll(
+                            'img[src^="http:"], script[src^="http:"], iframe[src^="http:"], source[src^="http:"],'
+                            + 'link[rel="stylesheet"][href^="http:"]')].map(e => e.getAttribute('src') || e.getAttribute('href'))""")
+                        info["unverschluesselt"] = sorted({a for a in anfragen + im_dom if a.startswith("http://")})[:30]
                     if mobil:
                         info["doc_breite"] = page.evaluate("document.documentElement.scrollWidth")
                     if screenshot:

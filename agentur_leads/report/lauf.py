@@ -105,7 +105,8 @@ def bewerten_und_gestalten(b: Bericht, opt: Optionen, vergleich: list[dict] | No
     lh = f.get("lighthouse") or {}
     m, d = lh.get("mobil") or {}, lh.get("desktop") or {}
     if m.get("scores"):
-        titel = "Google Lighthouse – Handy" + (" (Median aus 3 Messungen)" if len(m.get("laeufe", [])) == 3 else "")
+        n = len(m.get("laeufe", []))
+        titel = "Google Lighthouse – Handy" + (f" (Median aus {n} Messungen)" if n >= 3 else "")
         bilder["lighthouse"] = diagramme.lighthouse_ringe(m["scores"], d.get("scores", {}), titel, o / "04_lighthouse.png")
         if m.get("lcp") is not None:
             vs = f.get("vorschaltseite") or {}

@@ -204,6 +204,23 @@ def vergleich(zeilen: list[dict], name: str, titel: str, pfad: Path) -> Path:
     return _speichern(fig, pfad)
 
 
+def _freier_platz(x: float, y: float, belegt: list[tuple[float, float]], rx: float = 0.36, ry: float = 0.5) -> tuple[float, float]:
+    """Nächster freier Platz um (x, y) im selben Quadranten (Grenze bei 3).
+
+    rx/ry: Punktdurchmesser plus Luft in Achseneinheiten; die y-Achse ist im Bild gestaucht, daher ry > rx.
+    """
+    richtungen = [(1, 0), (-1, 0), (0, -1), (0, 1), (0.7, -0.7), (-0.7, -0.7), (0.7, 0.7), (-0.7, 0.7)]
+    for r in range(5):
+        for dx, dy in richtungen[: 1 if r == 0 else None]:
+            nx, ny = x + dx * r * rx, y + dy * r * ry
+            if ((nx < 3) != (x < 3) or (ny < 3) != (y < 3) or abs(nx - 3) < 0.22 or abs(ny - 3) < 0.3
+                    or not (0.8 <= nx <= 5.2 and 0.8 <= ny <= 4.8)):
+                continue
+            if all(((nx - a) / rx) ** 2 + ((ny - b) / ry) ** 2 >= 1 for a, b in belegt):
+                return nx, ny
+    return x, y
+
+
 def massnahmen_matrix(ms: list[Massnahme], pfad: Path) -> Path:
     fig, ax = plt.subplots(figsize=(7.2, 5.2))
     ax.set_xlim(0.5, 5.5), ax.set_ylim(0.5, 5.5)
@@ -215,9 +232,7 @@ def massnahmen_matrix(ms: list[Massnahme], pfad: Path) -> Path:
     ax.text(3.2, 0.72, "SPÄTER", fontsize=9, fontweight="bold", color=MUTED)
     belegt: list[tuple[float, float]] = []
     for m in ms:
-        x, y = m.aufwand, min(m.wirkung, 5.0)
-        while any(abs(x - a) < 0.32 and abs(y - b) < 0.32 for a, b in belegt):  # Überlappung vermeiden
-            x, y = x + 0.28, y - 0.12
+        x, y = _freier_platz(m.aufwand, min(m.wirkung, 4.75), belegt)
         belegt.append((x, y))
         ax.scatter([x], [y], s=620, color=PAKET_FARBE[m.paket], zorder=3, linewidths=0)
         ax.text(x, y, str(m.nr), ha="center", va="center", color="white", fontsize=10, fontweight="bold", zorder=4)
@@ -269,9 +284,11 @@ def handy_collage(mobil: Path, pfad: Path, vorschalt: Path | None = None, verzoe
         d.polygon([(mx - 40, my - 34), (mx + 36, my), (mx - 40, my + 34)], fill="#9CA3AF")
         d.text((mx, my + 70), f"{sek} s", font=fett, fill=MUTED, anchor="mm")
     else:
-        c = Image.new("RGB", (b.width + 80, b.height + 120), "white")
-        ImageDraw.Draw(c).text((c.width // 2, 40), "So sieht Ihre Website auf dem Handy aus", font=fett, fill=INK, anchor="mm")
-        c.paste(b, (40, 90), bm)
+        titel = "So sieht Ihre Website auf dem Handy aus"
+        breite = max(b.width, round(fett.getlength(titel))) + 80
+        c = Image.new("RGB", (breite, b.height + 120), "white")
+        ImageDraw.Draw(c).text((breite // 2, 40), titel, font=fett, fill=INK, anchor="mm")
+        c.paste(b, ((breite - b.width) // 2, 90), bm)
     c.save(pfad, quality=85)
     return pfad
 

@@ -32,7 +32,8 @@ def _lade_env(pfad: Path = Path(".env")) -> None:
         zeile = zeile.strip()
         if zeile and not zeile.startswith("#") and "=" in zeile:
             k, v = zeile.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip().strip('"'))
+            if v.strip().strip('"'):  # leere Einträge aus .env.example nicht übernehmen, sonst greifen Defaults nicht
+                os.environ.setdefault(k.strip(), v.strip().strip('"'))
 
 
 def finden(args: argparse.Namespace, http: PoliteSession) -> list[Lead]:
@@ -165,14 +166,14 @@ def main(argv: list[str] | None = None) -> None:
     sp.add_argument("--adresse", default="")
     sp.add_argument("--rating", type=float, default=None, help="Google-Bewertung, z.B. 4.7")
     sp.add_argument("--bewertungen", type=int, default=None, help="Anzahl Google-Bewertungen")
-    sp.add_argument("--datenquelle", default=os.environ.get("NOTION_LEADS_DATENQUELLE", "88b8eea0-e22a-82b8-a85c-87d4690ec17b"),
+    sp.add_argument("--datenquelle", default=os.environ.get("NOTION_LEADS_DATENQUELLE") or "88b8eea0-e22a-82b8-a85c-87d4690ec17b",
                     help="Notion-Data-Source-ID des Leads-Boards")
     sp.add_argument("--veroeffentlichen", action="store_true",
                     help="Bericht als Unterseite des Leads in Notion anlegen und Report-Score/-Datum setzen")
     sp.add_argument("--notion-seite", default="", help="Elternseite in Notion (mit --url/--leads und --veroeffentlichen)")
     sp.add_argument("--trockenlauf", action="store_true", help="Notion-Blöcke nur als JSON schreiben, nichts hochladen")
     sp.add_argument("--out", default="output/berichte")
-    sp.add_argument("--agentur", default=os.environ.get("AGENTUR_NAME", "GG Studios"))
+    sp.add_argument("--agentur", default=os.environ.get("AGENTUR_NAME") or "GG Studios")
     sp.add_argument("--max", type=int, default=0, help="max. Anzahl Leads (0 = alle)")
     sp.add_argument("--max-seiten", type=int, default=15, help="Seiten je Website crawlen (Default 15)")
     sp.add_argument("--lighthouse-laeufe", type=int, default=3, help="lokale Lighthouse-Messungen am Handy (Median)")

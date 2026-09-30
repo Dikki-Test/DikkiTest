@@ -15,7 +15,7 @@ from .modelle import GASTRO, GESUNDHEIT, HANDWERK, IMMOBILIEN, ReportLead, norma
 
 log = logging.getLogger(__name__)
 
-MODELL = os.environ.get("KI_SUCHE_MODELL", "claude-opus-5-5")
+STANDARD_MODELL = "claude-opus-5-5"
 SYSTEM = (
     "Du bist ein hilfreicher Assistent und beantwortest Fragen von Menschen, die vor Ort einen Betrieb suchen. "
     "Nutze die Websuche. Empfiehl konkrete Betriebe mit je einem kurzen Satz Begründung. Antworte auf Deutsch. "
@@ -138,23 +138,26 @@ def ki_stichprobe(lead: ReportLead) -> dict | None:
     except ImportError:
         return None
     client = anthropic.Anthropic()
+    modell = os.environ.get("KI_SUCHE_MODELL") or STANDARD_MODELL
     werkzeug = {"type": "web_search_20260209", "name": "web_search", "max_uses": 2, "allowed_callers": ["direct"],
                 "user_location": {"type": "approximate", "city": lead.ort, "country": "DE",
                                   "timezone": "Europe/Berlin"} if lead.ort else {"type": "approximate", "country": "DE"}}
     ergebnisse = []
     for f in fragen(lead):
         nachrichten = [{"role": "user", "content": f["frage"]}]
+        inhalt = []  # alle Blöcke der Antwort, auch aus pausierten Teilen (Suchergebnisse, Quellen)
         try:
-            for _ in range(3):  # pause_turn: pausierte Antwort unverändert zurückschicken
+            for _ in range(3):  # pause_turn: pausierte Antwort unverändert anhängen und fortsetzen lassen
                 antwort = client.beta.messages.create(
-                    model=MODELL, max_tokens=4000, system=SYSTEM, messages=nachrichten, tools=[werkzeug],
+                    model=modell, max_tokens=4000, system=SYSTEM, messages=nachrichten, tools=[werkzeug],
                     output_config={"effort": "low"},
                     # Bei einer Ablehnung durch Sicherheitsfilter serverseitig auf ein Ersatzmodell ausweichen
                     betas=["server-side-fallback-2026-07-01"], fallbacks="default",
                 )
+                inhalt += antwort.content
                 if antwort.stop_reason != "pause_turn":
                     break
-                nachrichten = [nachrichten[0], {"role": "assistant", "content": antwort.content}]
+                nachrichten.append({"role": "assistant", "content": antwort.content})
         except anthropic.APIError as e:
             log.warning("KI-Stichprobe für %s fehlgeschlagen: %s", lead.name, e)
             ergebnisse.append({**f, "fehler": type(e).__name__})
@@ -162,11 +165,11 @@ def ki_stichprobe(lead: ReportLead) -> dict | None:
         if antwort.stop_reason == "refusal":
             ergebnisse.append({**f, "fehler": "abgelehnt"})
             continue
-        ergebnisse.append({**f, **auswerten_antwort(antwort.content, lead)})
+        ergebnisse.append({**f, **auswerten_antwort(inhalt, lead)})
     gueltig = [e for e in ergebnisse if "fehler" not in e]
     allgemein = [e for e in gueltig if e["typ"] == "allgemein"]
     return {
-        "modell": MODELL,
+        "modell": modell,
         "fragen": ergebnisse,
         "allgemein_genannt": sum(e["genannt"] for e in allgemein),
         "allgemein_gesamt": len(allgemein),

@@ -213,7 +213,7 @@ def _methodik(f: dict, datum: dt.date) -> list[str]:
     lh = (f.get("lighthouse") or {}).get("mobil") or {}
     zeilen = [f"Alle Messungen am {datum.strftime('%d.%m.%Y')}."]
     if lh.get("scores"):
-        laeufe = f", Median aus {len(lh['laeufe'])} Messungen" if lh.get("laeufe") and len(lh["laeufe"]) > 1 else ""
+        laeufe = f", Median aus {len(lh['laeufe'])} Messungen" if lh.get("laeufe") and len(lh["laeufe"]) >= 3 else ""
         zeilen.append(f"**Ladezeit:** Google Lighthouse {lh.get('version', '')} ({lh.get('quelle', 'lokal gemessen')}{laeufe}), "
                       "simuliertes Mittelklasse-Smartphone mit 4G. Laborwerte, echte Ladezeiten schwanken.")
     zeilen += [

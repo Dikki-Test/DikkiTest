@@ -64,6 +64,11 @@ Die Werte stehen in `agentur_leads/scoring.py` und lassen sich leicht anpassen.
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[ki,dev]"      # ohne KI-Fotobewertung reicht: pip install -e .
 cp .env.example .env            # optionale Keys eintragen
+
+# Zusätzlich für Verkaufsberichte (agentur-leads report):
+pip install -e ".[report,ki]"   # Diagramme (matplotlib), Browser (Playwright), KI-Stichprobe
+python -m playwright install chromium
+npm install -g lighthouse@12    # lokale Lighthouse-Messung, entfällt mit PAGESPEED_API_KEY
 ```
 
 ## Benutzung
@@ -95,7 +100,66 @@ Betriebe werden übersprungen.
 |---|---|---|
 | `GOOGLE_PLACES_API_KEY` | Vollständigere Betriebsliste + sichere Aussage „keine Website“ + Google-Bewertungen | Google Maps Platform, Freikontingent pro Monat |
 | `IG_GRAPH_TOKEN`, `IG_BUSINESS_ACCOUNT_ID` | Instagram-Aktivität messen | kostenlos (Meta-App nötig) |
-| `ANTHROPIC_API_KEY` | `--ki-fotos`: Foto-Gutachten durch Claude (bis 6 Bilder pro Makler) | pro Anfrage, Anthropic API |
+| `ANTHROPIC_API_KEY` | `--ki-fotos`: Foto-Gutachten durch Claude (bis 6 Bilder pro Makler); `report`: KI-Stichprobe | pro Anfrage, Anthropic API |
+| `NOTION_TOKEN` | `report --notion` / `--veroeffentlichen`: Leads lesen, Berichte anlegen | kostenlos (interne Notion-Integration) |
+| `PAGESPEED_API_KEY` | `report`: Lighthouse über Google statt lokal, inkl. Messwerten echter Besucher | kostenlos (Google Cloud) |
+| `NOTION_LEADS_DATENQUELLE`, `AGENTUR_NAME`, `KI_SUCHE_MODELL` | `report`: Leads-Board, Absender im Bericht, Modell der KI-Stichprobe | – |
+
+## Verkaufsberichte: Website-Check je Lead
+
+`agentur-leads report` erstellt für jeden Lead einen ausführlichen Bericht mit
+Diagrammen, Screenshots und Maßnahmenplan. Er ist als Verkaufsunterlage gedacht
+und wird auf Wunsch direkt in Notion als Unterseite des Leads angelegt. Sechs
+Bereiche bekommen je 0–100 Punkte, daraus ergibt sich die Gesamtnote:
+
+| Bereich | Was gemessen wird |
+|---|---|
+| Ladezeit & Technik | Google Lighthouse am Handy (Median aus 3 Läufen) und am Computer: Ladezeit, Layout-Sprünge, Datenmenge |
+| Kunden-Erlebnis | Vorschaltseiten, Kernfunktionen je Branche (Speisekarte/Reservierung, Terminbuchung, Objekte/Bewertung, Anfrageformular), antippbare Telefonnummer, kaputte Formulare (`[contact_form]`-Reste), Handy-Layout, Aktualität |
+| Sicherheit & Datenschutz | HTTPS, unverschlüsselt eingebundene Dateien, Mozilla HTTP Observatory, PHP- und WordPress-Version, Impressum, Datenschutzerklärung, externe Dienste vor der Einwilligung (gemessen in einem echten Browser) |
+| Google-Sichtbarkeit (SEO) | Titel, Beschreibungen, Überschriften, Alt-Texte, sprechende Adressen, eine eindeutige Adresse, Sitemap, robots.txt, Textmenge, Ort im Titel |
+| KI-Auffindbarkeit | KI-Crawler in der robots.txt, Schema.org-Unternehmensdaten, llms.txt; mit `ANTHROPIC_API_KEY` eine Stichprobe: drei echte Fragen an Claude mit Websuche („Wer ist das beste vietnamesische Restaurant in Aachen?“) |
+| Social Media & Content | Instagram, verlinkte Profile, Alter der Fotos, Google-Bewertungen im Vergleich zu anderen Leads gleicher Branche und Stadt |
+
+Aus den nicht erfüllten Punkten entstehen Maßnahmen mit Aufwand und Wirkung,
+gebündelt in drei Angebotspakete (Sofort-Fix, Neue Website, Sichtbarkeit &
+Content). Die Preise trägst du in Notion selbst ein; dort steht „(eintragen)“.
+
+```bash
+# Einzelner Bericht, nur lokal → output/berichte/<name>/bericht.md + Diagramme
+agentur-leads report --url https://beispiel.de --name "Muster Bedachungen" \
+  --branche Handwerk --kategorie Dachdecker --ort Aachen --rating 4.6 --bewertungen 38
+
+# Alle Leads mit Website aus dem Notion-Board ansehen, ohne etwas in Notion zu schreiben
+agentur-leads report --notion --trockenlauf --max 5
+
+# Alle Leads: messen, Bericht als Unterseite des Leads anlegen und im Board
+# die Felder Report-Score, Report (Link) und Report-Datum setzen
+agentur-leads report --notion --veroeffentlichen
+```
+
+- **Notion-Zugang:** In Notion unter *Einstellungen → Verbindungen → Integrationen
+  entwickeln* eine interne Integration anlegen (Inhalte lesen, aktualisieren,
+  einfügen), sie im Board „📥 Leads“ über *••• → Verbindungen* hinzufügen und
+  das Token als `NOTION_TOKEN` setzen. Die drei Report-Felder legt der
+  Befehl beim ersten Veröffentlichen selbst an.
+- **Fortsetzbar:** Messungen liegen je Lead in `output/berichte/<name>/fakten.json`.
+  Leads mit Report-Datum werden übersprungen, `--neu` misst neu. Die Übersicht
+  aller Läufe steht in `output/berichte/uebersicht.csv`.
+- **Ausgeschlossen** werden Leads mit Qualität „❌ Geschlossen“, „❓ Verdacht
+  geschlossen“ oder „👻 Keine Online-Präsenz“.
+- **Dauer:** ohne `PAGESPEED_API_KEY` rund 2–3 Minuten je Lead, vor allem wegen
+  der lokalen Lighthouse-Läufe. Diese laufen immer nacheinander, weil parallele
+  Chrome-Instanzen die Werte verfälschen. `--parallel 3` beschleunigt nur
+  Crawling und Browser-Messung. Mit `PAGESPEED_API_KEY` misst Google, und der
+  Bericht zeigt zusätzlich die Ladezeiten echter Besucher, sofern Google genug
+  Daten hat.
+- **KI-Stichprobe:** drei Fragen je Lead mit je bis zu zwei Websuchen. Die
+  Websuche kostet 10 $ pro 1.000 Suchen, dazu kommen Tokens, grob 0,10–0,40 $
+  je Lead mit dem Standardmodell (`KI_SUCHE_MODELL`, Standard `claude-opus-5-5`).
+  Abschalten mit `--ohne-ki`.
+- Der **Observatory-Scan** läuft über die öffentliche API von Mozilla (MDN). Wer
+  das nicht möchte, nimmt `--ohne-observatory`.
 
 ## Rechtliches – bitte lesen
 
