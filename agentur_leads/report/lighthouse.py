@@ -98,8 +98,10 @@ def _chrome_pfad() -> str:
     return _CHROME["p"]
 
 
-# Lokale Läufe nacheinander: parallele Chrome-Instanzen verfälschen die Leistungswerte und brechen teils ab.
-_SPERRE = threading.Lock()
+# Lokale Läufe standardmäßig nacheinander: parallele Chrome-Instanzen verfälschen die Leistungswerte und
+# brechen teils ab (Test auf 4 Kernen: 52–69 statt 83 Punkte). LIGHTHOUSE_PARALLEL erlaubt mehr Spuren –
+# nur auf deutlich stärkeren Rechnern sinnvoll.
+_SPERRE = threading.BoundedSemaphore(max(1, int(os.environ.get("LIGHTHOUSE_PARALLEL") or 1)))
 
 
 def _ein_lauf(exe: str, chrome: str, url: str, strategie: str, timeout: float) -> dict | None:
@@ -123,7 +125,14 @@ def _gueltig(e: dict | None) -> bool:
     return bool(e and e.get("scores") and not e.get("laufzeitfehler"))
 
 
-def lokal(url: str, strategie: str, laeufe: int = 1, timeout: float = 240) -> dict:
+def _median(ergebnisse: list[dict | None]) -> dict | None:
+    gueltig = sorted(filter(_gueltig, ergebnisse), key=lambda e: e["scores"].get("performance", 0))
+    return gueltig[len(gueltig) // 2] if gueltig else None
+
+
+def lokal(url: str, strategie: str, laeufe: int = 1, timeout: float = 240, bis: int = 0, schwelle: int = 60) -> dict:
+    """Median aus `laeufe` Messungen. Mit bis > laeufe wird bei schwachem Ergebnis (Leistung < schwelle)
+    auf `bis` Messungen aufgestockt – dort sind Ausreißer am ärgerlichsten, gute Seiten messen stabil."""
     exe, chrome = shutil.which("lighthouse"), _chrome_pfad()
     if not exe or not chrome:
         return {"fehler": "Lighthouse-CLI oder Chrome nicht gefunden"}
@@ -131,17 +140,21 @@ def lokal(url: str, strategie: str, laeufe: int = 1, timeout: float = 240) -> di
         ergebnisse = [_ein_lauf(exe, chrome, url, strategie, timeout) for _ in range(max(1, laeufe))]
         if not any(map(_gueltig, ergebnisse)):  # ein zweiter Versuch, z. B. nach Zeitüberschreitung
             ergebnisse.append(_ein_lauf(exe, chrome, url, strategie, timeout))
-    gueltig = sorted(filter(_gueltig, ergebnisse), key=lambda e: e["scores"].get("performance", 0))
-    if not gueltig:
+        erst = _median(ergebnisse)
+        if erst and bis > len(ergebnisse) and erst["scores"].get("performance", 100) < schwelle:
+            ergebnisse += [_ein_lauf(exe, chrome, url, strategie, timeout) for _ in range(bis - len(ergebnisse))]
+    median = _median(ergebnisse)
+    if not median:
         return {"fehler": "Lighthouse lieferte kein Ergebnis"}
-    median = gueltig[len(gueltig) // 2]
     median["quelle"] = "lokal gemessen"
-    median["laeufe"] = [e["scores"].get("performance") for e in gueltig]
+    median["laeufe"] = sorted(e["scores"].get("performance") for e in ergebnisse if _gueltig(e))
     return median
 
 
-def lighthouse(url: str, laeufe_mobil: int = 3) -> dict:
+def lighthouse(url: str, laeufe_mobil: int = 3, schnell: bool = False) -> dict:
+    """schnell: am Handy erst eine Messung, nur bei Leistung < 60 auf laeufe_mobil aufstocken."""
     key = os.environ.get("PAGESPEED_API_KEY", "")
     if key:
         return {"mobil": psi(url, "mobile", key), "desktop": psi(url, "desktop", key)}
-    return {"mobil": lokal(url, "mobile", laeufe_mobil), "desktop": lokal(url, "desktop", 1)}
+    mobil = lokal(url, "mobile", 1, bis=laeufe_mobil) if schnell else lokal(url, "mobile", laeufe_mobil)
+    return {"mobil": mobil, "desktop": lokal(url, "desktop", 1)}

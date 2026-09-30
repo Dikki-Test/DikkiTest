@@ -166,9 +166,13 @@ agentur-leads report --notion --veroeffentlichen --mit-seite
 - **Dauer:** ohne `PAGESPEED_API_KEY` rund 2–3 Minuten je Lead, vor allem wegen
   der lokalen Lighthouse-Läufe. Diese laufen immer nacheinander, weil parallele
   Chrome-Instanzen die Werte verfälschen. `--parallel 3` beschleunigt nur
-  Crawling und Browser-Messung. Mit `PAGESPEED_API_KEY` misst Google, und der
-  Bericht zeigt zusätzlich die Ladezeiten echter Besucher, sofern Google genug
-  Daten hat.
+  Crawling und Browser-Messung. `--schnell` misst am Handy erst einmal und stockt
+  nur bei schwachen Werten (Leistung < 60) auf drei Messungen auf – für große
+  Läufe etwa halb so lang. Mit `PAGESPEED_API_KEY` misst Google (parallel, ohne
+  lokale Rechenlast), und der Bericht zeigt zusätzlich die Ladezeiten echter
+  Besucher, sofern Google genug Daten hat.
+- **Notion-Export als Quelle:** `--leads export.json` liest auch flache Board-Zeilen
+  (Spalten wie im Board, dazu `url` der Seite), z. B. aus einem Export.
 - **KI-Stichprobe:** drei Fragen je Lead mit je bis zu zwei Websuchen. Die
   Websuche kostet 10 $ pro 1.000 Suchen, dazu kommen Tokens, grob 0,10–0,40 $
   je Lead mit dem Standardmodell (`KI_SUCHE_MODELL`, Standard `claude-opus-5-5`).

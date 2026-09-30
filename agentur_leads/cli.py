@@ -108,7 +108,8 @@ def report(args: argparse.Namespace, http: PoliteSession) -> None:
     angebot = json.loads(Path(args.angebot).read_text(encoding="utf-8")) if args.angebot else None
 
     opt = lauf.Optionen(out=Path(args.out), agentur=args.agentur, max_seiten=args.max_seiten,
-                        lighthouse_laeufe=args.lighthouse_laeufe, browser=not args.ohne_browser,
+                        lighthouse_laeufe=args.lighthouse_laeufe, lighthouse_schnell=args.schnell,
+                        browser=not args.ohne_browser,
                         lighthouse=not args.ohne_lighthouse, observatory=not args.ohne_observatory,
                         ki=not args.ohne_ki, neu_messen=args.neu, datum=dt.date.today(), pdf=not args.ohne_pdf,
                         mit_seite=args.mit_seite, angebot=angebot, kontakt=args.kontakt)
@@ -187,6 +188,8 @@ def main(argv: list[str] | None = None) -> None:
     sp.add_argument("--max", type=int, default=0, help="max. Anzahl Leads (0 = alle)")
     sp.add_argument("--max-seiten", type=int, default=15, help="Seiten je Website crawlen (Default 15)")
     sp.add_argument("--lighthouse-laeufe", type=int, default=3, help="lokale Lighthouse-Messungen am Handy (Median)")
+    sp.add_argument("--schnell", action="store_true",
+                    help="Lighthouse am Handy erst einmal messen, nur bei Leistung < 60 auf --lighthouse-laeufe aufstocken")
     sp.add_argument("--parallel", type=int, default=1, help="Leads gleichzeitig messen (Default 1)")
     sp.add_argument("--neu", action="store_true", help="neu messen, auch wenn schon ein Bericht existiert")
     sp.add_argument("--ohne-browser", action="store_true", help="keine Screenshots/Datenschutz-Messung (ohne Playwright)")

@@ -151,3 +151,29 @@ def test_vergleichsgruppe():
     ich = ReportLead("Ich", "http://i.de", branche="Gastronomie", kategorie="Restaurant", ort="Aachen", google_rating=4.7, google_bewertungen=341)
     gruppe = vergleichsgruppe(ich, [a, b, c, ich])
     assert [z["name"] for z in gruppe] == ["B", "A", "Ich"]
+
+
+def test_lead_aus_flacher_board_zeile():
+    from agentur_leads.report.quelle import lead_aus_zeile
+    z = {"Name": "Viet Haus", "url": "https://app.notion.com/p/3ea8eea0e22a81169f3edde94402f2c4",
+         "Website": "http://viethaus-restaurant.de/", "Branche": "Gastronomie", "Fachrichtung": "Restaurant",
+         "Adresse": "Rathausplatz 5, Aachen", "KI-Einschätzung": "Google 4,7 ★ (341 Bewertungen). Website 1/10",
+         "Notiz": "Nachtlauf 29.09.2026 \\| Quelle: OpenStreetMap \\| Küche: asian", "Instagram vorhanden": "nein",
+         "Qualität": "✅ OK"}
+    lead = lead_aus_zeile(z)
+    assert lead.notion_page_id == "3ea8eea0-e22a-8116-9f3e-dde94402f2c4"
+    assert (lead.kategorie, lead.kueche, lead.ort, lead.google_rating, lead.google_bewertungen) == \
+           ("Restaurant", "asian", "Aachen", 4.7, 341)
+    assert lead.slug == "viet-haus-aachen-02f2c4"  # Notion-ID macht den Ordner eindeutig
+
+
+def test_lighthouse_stockt_nur_bei_schwachen_werten_auf(monkeypatch):
+    from agentur_leads.report import lighthouse as lh
+    werte = iter([45, 60, 40, 95])
+    monkeypatch.setattr(lh.shutil, "which", lambda _: "/bin/lighthouse")
+    monkeypatch.setattr(lh, "_chrome_pfad", lambda: "/bin/chrome")
+    monkeypatch.setattr(lh, "_ein_lauf", lambda *a: {"scores": {"performance": next(werte)}, "laufzeitfehler": ""})
+    schwach = lh.lokal("https://x.de/", "mobile", 1, bis=3)
+    assert schwach["laeufe"] == [40, 45, 60] and schwach["scores"]["performance"] == 45  # Median aus 3
+    gut = lh.lokal("https://y.de/", "mobile", 1, bis=3)
+    assert gut["laeufe"] == [95]  # gute Seite: eine Messung genügt

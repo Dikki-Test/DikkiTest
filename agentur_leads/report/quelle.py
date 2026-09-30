@@ -47,8 +47,11 @@ def _wert(prop: dict | None):
 
 
 def lead_aus_notion(seite: dict) -> ReportLead:
-    p = seite.get("properties", {})
-    w = {name: _wert(prop) for name, prop in p.items()}
+    w = {name: _wert(prop) for name, prop in seite.get("properties", {}).items()}
+    return _lead_aus_werten(w, seite.get("id", ""), seite.get("url", ""))
+
+
+def _lead_aus_werten(w: dict, page_id: str, url: str) -> ReportLead:
     rating, anzahl = bewertung_aus_text(w.get("KI-Einschätzung") or "")
     kueche = KUECHE.search(w.get("Notiz") or "")
     ig = (w.get("Instagram-Handle") or "").strip().lstrip("@")
@@ -63,9 +66,21 @@ def lead_aus_notion(seite: dict) -> ReportLead:
         ort=ort_aus_adresse(w.get("Adresse") or ""),
         google_rating=rating, google_bewertungen=anzahl,
         instagram=ig, instagram_vorhanden=True if ig else ig_da,
-        notion_page_id=seite.get("id", ""), notion_url=seite.get("url", ""),
+        notion_page_id=page_id, notion_url=url,
         bericht_datum=w.get("Report-Datum") or "",
     )
+
+
+def lead_aus_zeile(z: dict) -> ReportLead:
+    """Flache Board-Zeile, wie sie der Notion-Connector oder ein Export liefert ({"Name": …, "url": …})."""
+    url = z.get("url") or ""
+    m = re.search(r"([0-9a-f]{32})", url.replace("-", ""))
+    page_id = ""
+    if m:
+        h = m.group(1)
+        page_id = f"{h[:8]}-{h[8:12]}-{h[12:16]}-{h[16:20]}-{h[20:]}"
+    werte = {**z, "Report-Datum": z.get("date:Report-Datum:start") or z.get("Report-Datum") or ""}
+    return _lead_aus_werten(werte, page_id, url)
 
 
 def notion_filter(seite: dict) -> bool:
@@ -75,8 +90,13 @@ def notion_filter(seite: dict) -> bool:
 
 
 def leads_aus_datei(pfad: Path) -> list[ReportLead]:
-    """Liest output/leads.json oder output/ergebnisse.json des Lead-Finders."""
+    """Liest output/leads.json bzw. ergebnisse.json des Lead-Finders oder einen Notion-Export (flache Zeilen)."""
     daten = json.loads(pfad.read_text(encoding="utf-8"))
+    if isinstance(daten, dict):  # Antwort einer Board-Abfrage: {"results": [...]}
+        daten = daten.get("results", [])
+    if daten and "Name" in daten[0] and "url" in daten[0]:  # flache Board-Zeilen aus Notion
+        return [lead_aus_zeile(z) for z in daten if (z.get("Website") or "").strip()
+                and z.get("Qualität") not in AUSSCHLIESSEN]
     leads = []
     for d in daten:
         lead = d.get("lead", d)

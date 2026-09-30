@@ -33,6 +33,7 @@ class Optionen:
     agentur: str = "GG Studios"
     max_seiten: int = 15
     lighthouse_laeufe: int = 3
+    lighthouse_schnell: bool = False  # erst 1 Messung, nur bei schwachen Werten lighthouse_laeufe
     browser: bool = True
     lighthouse: bool = True
     observatory: bool = True
@@ -96,7 +97,7 @@ def messen(lead: ReportLead, http: PoliteSession, ordner: Path, opt: Optionen) -
         f["browser"] = browser_messung(mess_url, ordner, unterseiten, vs)
     if opt.lighthouse:
         from .lighthouse import lighthouse
-        f["lighthouse"] = lighthouse(mess_url, opt.lighthouse_laeufe)
+        f["lighthouse"] = lighthouse(mess_url, opt.lighthouse_laeufe, opt.lighthouse_schnell)
     if opt.ki:
         from .ki_suche import ki_stichprobe
         f["ki_suche"] = ki_stichprobe(lead)

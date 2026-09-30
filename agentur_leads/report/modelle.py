@@ -41,7 +41,8 @@ class ReportLead:
 
     @property
     def slug(self) -> str:
-        return slug(f"{self.name}-{self.ort}" if self.ort else self.name)
+        basis = slug(f"{self.name}-{self.ort}" if self.ort else self.name)
+        return f"{basis}-{self.notion_page_id.replace('-', '')[-6:]}" if self.notion_page_id else basis
 
     @property
     def domain(self) -> str:
