@@ -1,7 +1,8 @@
-"""Berichtsinhalt als einfache Block-Liste – und zwei Ausgaben daraus:
+"""Berichtsinhalt als einfache Block-Liste – und die Ausgaben daraus:
 
 - Notion-Markdown (z.B. zum Einfügen über den Notion-Connector oder als Vorschau)
 - Notion-API-Blöcke (JSON für POST /v1/pages bzw. PATCH /v1/blocks/{id}/children)
+- PDF (siehe pdf.py; baue_bericht(..., ausgabe="pdf") lässt interne Notizen und Platzhalter weg)
 
 Inline-Formatierung im Text: **fett**, *kursiv*, `code`. Alles andere ist reiner Text.
 """
@@ -23,6 +24,7 @@ class H:  # Überschrift
     text: str
     ebene: int = 2
     toggle: list["Block"] = field(default_factory=list)  # nicht leer = aufklappbare Überschrift
+    neue_seite: bool = False  # PDF: Abschnitt beginnt auf einer neuen Seite
 
 
 @dataclass
@@ -42,6 +44,7 @@ class Hinweis:  # Callout; zeilen[0] wird fett dargestellt, wenn titel=True
     farbe: str  # gray, blue, green, yellow, red, purple, orange
     zeilen: list[str]
     titel: bool = True
+    intern: bool = False  # nur für die Agentur, nicht in der PDF
 
 
 @dataclass
@@ -81,16 +84,27 @@ def _pruef_tabelle(b: Bereich) -> Tabelle:
 
 
 def baue_bericht(f: dict, bereiche: list[Bereich], gesamt: int, ms: list[Massnahme], bilder: dict[str, Path],
-                 agentur: str, datum: dt.date) -> list[Block]:
+                 agentur: str, datum: dt.date, ausgabe: str = "notion", angebot: dict | None = None,
+                 kontakt: str = "") -> list[Block]:
+    """ausgabe="notion": mit Platzhaltern zum Ausfüllen in Notion; "pdf": fertig zum Versenden.
+
+    angebot: {"1": {"dauer": "…", "preis": "…"}, "2": …, "3": …} – Dauer und Preis je Paket (optional).
+    """
+    pdf = ausgabe == "pdf"
     lead = f["lead"]
     branche = lead.get("branche", "")
     k = kunden(branche)
     r, nb = lead.get("google_rating"), lead.get("google_bewertungen")
     geprueft = ", ".join(dict.fromkeys(u.split("//")[-1].rstrip("/") for u in
                                        [lead.get("website", ""), f.get("website_url", "")] if u))
-    bl: list[Block] = [Hinweis("📊", "gray", [
-        f"**Online-Check für {lead['name']}**" + (f" · {lead['adresse']}" if lead.get("adresse") else ""),
-        f"Erstellt von {agentur} am {datum.strftime('%d.%m.%Y')} · Geprüft: {geprueft}"], titel=False)]
+    if pdf:
+        bl: list[Block] = [H(f"Online-Check für {lead['name']}", 1),
+                           P((f"{lead['adresse']} · " if lead.get("adresse") else "")
+                             + f"Erstellt von {agentur} am {datum.strftime('%d.%m.%Y')} · Geprüft: {geprueft}")]
+    else:
+        bl = [Hinweis("📊", "gray", [
+            f"**Online-Check für {lead['name']}**" + (f" · {lead['adresse']}" if lead.get("adresse") else ""),
+            f"Erstellt von {agentur} am {datum.strftime('%d.%m.%Y')} · Geprüft: {geprueft}"], titel=False)]
 
     # Kopf: Gesamtnote + das Wichtigste
     if r and r >= 4.5 and gesamt < 60:
@@ -118,7 +132,7 @@ def baue_bericht(f: dict, bereiche: list[Bereich], gesamt: int, ms: list[Massnah
     bl.append(Trenner())
 
     # 1. Erster Eindruck
-    bl.append(H("1. Erster Eindruck"))
+    bl.append(H("1. Erster Eindruck", neue_seite=True))
     vs = f.get("vorschaltseite")
     if "handy" in bilder:
         bl.append(Bild(bilder["handy"], f"Wer {lead.get('website', '').split('//')[-1].rstrip('/')} aufruft, sieht "
@@ -151,7 +165,7 @@ def baue_bericht(f: dict, bereiche: list[Bereich], gesamt: int, ms: list[Massnah
     bl.append(Trenner())
 
     # Maßnahmen und Angebot
-    bl.append(H(f"{len(bereiche) + 2}. Maßnahmenplan"))
+    bl.append(H(f"{len(bereiche) + 2}. Maßnahmenplan", neue_seite=True))
     if "massnahmen" in bilder:
         bl.append(Bild(bilder["massnahmen"]))
     stufe = lambda v: "klein" if v < 2.0 else "mittel" if v < 3.8 else "groß"  # noqa: E731
@@ -160,7 +174,8 @@ def baue_bericht(f: dict, bereiche: list[Bereich], gesamt: int, ms: list[Massnah
                        for m in ms]))
     bl.append(H(f"{len(bereiche) + 3}. Unser Angebot"))
     nr = {p: [m.nr for m in ms if m.paket == p] for p in (1, 2, 3)}
-    spalten = []
+    angebot = {str(key): wert for key, wert in (angebot or {}).items()}
+    spalten, offen = [], False
     for p, icon, farbe, beschreibung, einheit in [
         (1, "🔧", "purple", "Schnelle Verbesserungen mit großer Wirkung auf der bestehenden Website.", "€"),
         (2, "🚀", "green", "Moderne Website, fürs Handy gebaut – inklusive Paket 1.", "€"),
@@ -168,9 +183,25 @@ def baue_bericht(f: dict, bereiche: list[Bereich], gesamt: int, ms: list[Massnah
     ]:
         wort = "Maßnahme" if len(nr[p]) == 1 else "Maßnahmen"
         text = f"{wort} {_nummern(nr[p])}: {beschreibung}" if nr[p] else beschreibung
-        spalten.append([Hinweis(icon, farbe, [PAKETE[p], text, "Dauer: (eintragen)", f"Preis: (eintragen) {einheit}"])])
+        a = angebot.get(str(p)) or {}
+        zeilen = [PAKETE[p], text]
+        if a.get("dauer"):
+            zeilen.append(f"Dauer: {a['dauer']}")
+        if a.get("preis"):
+            zeilen.append(f"Preis: {a['preis']}")
+        if not (a.get("dauer") and a.get("preis")):
+            offen = True
+            if not pdf:
+                zeilen += ["Dauer: (eintragen)"] * (not a.get("dauer")) + [f"Preis: (eintragen) {einheit}"] * (not a.get("preis"))
+        spalten.append([Hinweis(icon, farbe, zeilen)])
     bl.append(Spalten(spalten))
-    bl.append(Hinweis("📝", "yellow", ["Intern, vor dem Versand löschen:", "Dauer und Preise in den Paketen eintragen."]))
+    if offen and pdf:
+        bl.append(P("Umfang, Dauer und Preis stimmen wir gern in einem kurzen Gespräch auf Ihre Wünsche ab."))
+    elif offen:
+        bl.append(Hinweis("📝", "yellow", ["Intern, vor dem Versand löschen:", "Dauer und Preise in den Paketen eintragen."],
+                          intern=True))
+    if kontakt:
+        bl.append(Hinweis("✉️", "blue", ["Ihr Ansprechpartner", kontakt]))
 
     # Methodik
     bl.append(H("Methodik & Quellen", 2, toggle=[Liste(_methodik(f, datum))]))

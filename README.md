@@ -108,9 +108,10 @@ Betriebe werden übersprungen.
 ## Verkaufsberichte: Website-Check je Lead
 
 `agentur-leads report` erstellt für jeden Lead einen ausführlichen Bericht mit
-Diagrammen, Screenshots und Maßnahmenplan. Er ist als Verkaufsunterlage gedacht
-und wird auf Wunsch direkt in Notion als Unterseite des Leads angelegt. Sechs
-Bereiche bekommen je 0–100 Punkte, daraus ergibt sich die Gesamtnote:
+Diagrammen, Screenshots und Maßnahmenplan – als **PDF zum Vorlegen oder
+Versenden**. Auf Wunsch hängt der Befehl das PDF direkt im Notion-Leads-Board an
+(Spalte „Report-PDF“). Sechs Bereiche bekommen je 0–100 Punkte, daraus ergibt
+sich die Gesamtnote:
 
 | Bereich | Was gemessen wird |
 |---|---|
@@ -123,26 +124,40 @@ Bereiche bekommen je 0–100 Punkte, daraus ergibt sich die Gesamtnote:
 
 Aus den nicht erfüllten Punkten entstehen Maßnahmen mit Aufwand und Wirkung,
 gebündelt in drei Angebotspakete (Sofort-Fix, Neue Website, Sichtbarkeit &
-Content). Die Preise trägst du in Notion selbst ein; dort steht „(eintragen)“.
+Content). Dauer und Preis je Paket kommen aus einer kleinen JSON-Datei
+(`--angebot angebot.json` oder `AGENTUR_ANGEBOT`):
+
+```json
+{"1": {"dauer": "1 Woche", "preis": "ab 390 €"},
+ "2": {"dauer": "4–6 Wochen", "preis": "ab 2.900 €"},
+ "3": {"dauer": "monatlich kündbar", "preis": "ab 290 € pro Monat"}}
+```
+
+Ohne Datei steht im PDF „Umfang, Dauer und Preis stimmen wir gern in einem
+kurzen Gespräch auf Ihre Wünsche ab.“ `--kontakt` (oder `AGENTUR_KONTAKT`)
+fügt am Ende einen Ansprechpartner ein.
 
 ```bash
-# Einzelner Bericht, nur lokal → output/berichte/<name>/bericht.md + Diagramme
+# Einzelner Bericht, nur lokal → output/berichte/<name>/bericht.pdf (+ bericht.md, Diagramme)
 agentur-leads report --url https://beispiel.de --name "Muster Bedachungen" \
   --branche Handwerk --kategorie Dachdecker --ort Aachen --rating 4.6 --bewertungen 38
 
 # Alle Leads mit Website aus dem Notion-Board ansehen, ohne etwas in Notion zu schreiben
 agentur-leads report --notion --trockenlauf --max 5
 
-# Alle Leads: messen, Bericht als Unterseite des Leads anlegen und im Board
-# die Felder Report-Score, Report (Link) und Report-Datum setzen
+# Alle Leads: messen, PDF im Board anhängen (Report-PDF) und Report-Score/-Datum setzen
 agentur-leads report --notion --veroeffentlichen
+
+# zusätzlich je Lead eine Notion-Unterseite mit dem Bericht (Feld „Report“ verlinkt sie)
+agentur-leads report --notion --veroeffentlichen --mit-seite
 ```
 
 - **Notion-Zugang:** In Notion unter *Einstellungen → Verbindungen → Integrationen
   entwickeln* eine interne Integration anlegen (Inhalte lesen, aktualisieren,
   einfügen), sie im Board „📥 Leads“ über *••• → Verbindungen* hinzufügen und
-  das Token als `NOTION_TOKEN` setzen. Die drei Report-Felder legt der
-  Befehl beim ersten Veröffentlichen selbst an.
+  das Token als `NOTION_TOKEN` setzen. Die Report-Felder legt der Befehl beim
+  ersten Veröffentlichen selbst an. Das PDF bleibt unter 5 MB (Grenze im
+  Notion-Free-Plan); bei Bedarf werden die Screenshots stärker verkleinert.
 - **Fortsetzbar:** Messungen liegen je Lead in `output/berichte/<name>/fakten.json`.
   Leads mit Report-Datum werden übersprungen, `--neu` misst neu. Die Übersicht
   aller Läufe steht in `output/berichte/uebersicht.csv`.

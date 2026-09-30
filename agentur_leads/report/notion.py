@@ -1,4 +1,4 @@
-"""Notion-REST-API: Leads lesen, Bilder hochladen, Berichtsseite anlegen, Lead-Felder setzen.
+"""Notion-REST-API: Leads lesen, PDF und Bilder hochladen, Berichtsseite anlegen, Lead-Felder setzen.
 
 Braucht NOTION_TOKEN (interne Integration, die mit dem Leads-Board verbunden ist).
 """
@@ -19,7 +19,12 @@ MAX_OBEN = 90  # Top-Level-Blöcke je Anfrage (API-Grenze 100)
 MAX_GESAMT = 450  # Blöcke inkl. verschachtelter je Anfrage (API-Grenze 1000)
 
 # Felder im Leads-Board, die ein Berichtslauf füllt (werden bei Bedarf angelegt)
-LEAD_FELDER = {"Report-Score": {"number": {"format": "number"}}, "Report": {"url": {}}, "Report-Datum": {"date": {}}}
+LEAD_FELDER = {"Report-Score": {"number": {"format": "number"}}, "Report-Datum": {"date": {}}, "Report-PDF": {"files": {}}}
+SEITEN_FELD = {"Report": {"url": {}}}  # nur mit Unterseite (--mit-seite)
+
+
+def lead_felder(mit_seite: bool = False) -> dict:
+    return {**LEAD_FELDER, **(SEITEN_FELD if mit_seite else {})}
 
 
 class NotionFehler(RuntimeError):
@@ -85,18 +90,21 @@ class Notion:
                 return seiten
             body["start_cursor"] = d["next_cursor"]
 
-    def felder_sicherstellen(self, datenquelle: str, felder: dict = LEAD_FELDER) -> None:
+    def felder_sicherstellen(self, datenquelle: str, felder: dict | None = None) -> None:
+        felder = felder or LEAD_FELDER
         ds = self._anfrage("GET", f"/data_sources/{datenquelle}")
         fehlend = {k: v for k, v in felder.items() if k not in ds.get("properties", {})}
         if fehlend:
             log.info("Lege Felder im Leads-Board an: %s", ", ".join(fehlend))
             self._anfrage("PATCH", f"/data_sources/{datenquelle}", json={"properties": fehlend})
 
-    def hochladen(self, pfad: Path) -> str:
+    def hochladen(self, pfad: Path, name: str = "") -> str:
+        """Lädt eine Datei hoch (bis 20 MB, Workspace-Grenzen gelten); name = Dateiname in Notion."""
+        name = name or pfad.name
         typ = mimetypes.guess_type(pfad.name)[0] or "application/octet-stream"
-        fu = self._anfrage("POST", "/file_uploads", json={"filename": pfad.name, "content_type": typ})
+        fu = self._anfrage("POST", "/file_uploads", json={"filename": name, "content_type": typ})
         with pfad.open("rb") as fh:
-            self._anfrage("POST", f"/file_uploads/{fu['id']}/send", files={"file": (pfad.name, fh, typ)})
+            self._anfrage("POST", f"/file_uploads/{fu['id']}/send", files={"file": (name, fh, typ)})
         return fu["id"]
 
     def seite_anlegen(self, eltern_id: str, titel: str, icon: str, bloecke: list[dict]) -> dict:

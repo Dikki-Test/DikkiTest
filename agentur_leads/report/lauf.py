@@ -1,4 +1,7 @@
-"""Orchestrierung: je Lead messen → bewerten → Diagramme → Bericht (Markdown + Notion-Blöcke) → optional veröffentlichen.
+"""Orchestrierung: je Lead messen → bewerten → Diagramme → Bericht (PDF, Markdown, Notion-Blöcke) → optional veröffentlichen.
+
+Veröffentlichen heißt: das PDF in der Spalte „Report-PDF“ des Leads anhängen, Report-Score und -Datum setzen;
+mit mit_seite zusätzlich eine Notion-Unterseite mit dem Bericht anlegen.
 
 Fortsetzbar: Messungen liegen je Lead in <out>/<slug>/fakten.json und werden wiederverwendet; bereits
 veröffentlichte Berichte (veroeffentlicht.json bzw. Report-Datum in Notion) werden übersprungen.
@@ -10,6 +13,7 @@ import csv
 import datetime as dt
 import json
 import logging
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -35,6 +39,10 @@ class Optionen:
     ki: bool = True
     neu_messen: bool = False
     datum: dt.date = field(default_factory=dt.date.today)
+    pdf: bool = True
+    mit_seite: bool = False  # zusätzlich eine Notion-Unterseite je Lead
+    angebot: dict | None = None  # Dauer/Preis je Paket, siehe inhalt.baue_bericht
+    kontakt: str = ""
 
 
 @dataclass
@@ -48,6 +56,7 @@ class Bericht:
     bloecke: list = field(default_factory=list)
     fehler: str = ""
     notion_url: str = ""
+    pdf: Path | None = None
 
 
 def messen(lead: ReportLead, http: PoliteSession, ordner: Path, opt: Optionen) -> dict:
@@ -130,8 +139,19 @@ def bewerten_und_gestalten(b: Bericht, opt: Optionen, vergleich: list[dict] | No
         bilder["vergleich"] = diagramme.vergleich(vergleich, b.lead.name, titel, o / "08_vergleich.png")
     if b.massnahmen:
         bilder["massnahmen"] = diagramme.massnahmen_matrix(b.massnahmen, o / "09_massnahmen.png")
-    b.bloecke = inhalt.baue_bericht(f, b.bereiche, b.gesamt, b.massnahmen, bilder, opt.agentur, opt.datum)
+    b.bloecke = inhalt.baue_bericht(f, b.bereiche, b.gesamt, b.massnahmen, bilder, opt.agentur, opt.datum,
+                                    angebot=opt.angebot, kontakt=opt.kontakt)
     (o / "bericht.md").write_text(inhalt.als_markdown(b.bloecke, lambda p: p.name), encoding="utf-8")
+    if opt.pdf:
+        bl_pdf = inhalt.baue_bericht(f, b.bereiche, b.gesamt, b.massnahmen, bilder, opt.agentur, opt.datum,
+                                     ausgabe="pdf", angebot=opt.angebot, kontakt=opt.kontakt)
+        try:
+            from . import pdf
+            b.pdf = pdf.erzeuge_pdf(bl_pdf, o / "bericht.pdf", titel=f"Online-Check {b.lead.name}",
+                                    fusszeile=f"Online-Check {b.lead.name} · {opt.agentur} · {opt.datum.strftime('%d.%m.%Y')}",
+                                    oberzeile=f"{opt.agentur} · Website-Check")
+        except Exception as e:  # z.B. Playwright/Chromium fehlt: der Bericht bleibt ohne PDF
+            log.warning("PDF für %s nicht erstellt: %s", b.lead.name, e)
 
 
 def erstelle_bericht(lead: ReportLead, http: PoliteSession, opt: Optionen, vergleich: list[dict] | None = None) -> Bericht:
@@ -152,8 +172,17 @@ def erstelle_bericht(lead: ReportLead, http: PoliteSession, opt: Optionen, vergl
     return b
 
 
-def veroeffentlichen(b: Bericht, notion, eltern_id: str, trockenlauf: bool = False) -> str:
-    """Lädt die Bilder hoch und legt die Berichtsseite unter eltern_id an. Gibt die Seiten-URL zurück."""
+def pdf_dateiname(b: Bericht) -> str:
+    name = re.sub(r'[\\/:*?"<>|]+', " ", b.lead.name).strip()
+    return f"Website-Check {name} {b.fakten.get('datum', '')}".strip() + ".pdf"
+
+
+def veroeffentlichen(b: Bericht, notion, eltern_id: str, trockenlauf: bool = False, mit_seite: bool = False) -> dict:
+    """Lädt das PDF hoch und legt mit mit_seite die Berichtsseite unter eltern_id an.
+
+    Gibt {"pdf_id": Upload-ID oder "", "url": Seiten-URL oder ""} zurück.
+    """
+    ergebnis = {"pdf_id": "", "url": ""}
     ids: dict[Path, str] = {}
 
     def upload(pfad: Path) -> str:
@@ -161,14 +190,29 @@ def veroeffentlichen(b: Bericht, notion, eltern_id: str, trockenlauf: bool = Fal
             ids[pfad] = f"TROCKEN-{pfad.name}" if trockenlauf else notion.hochladen(pfad)
         return ids[pfad]
 
-    bloecke = inhalt.als_notion_bloecke(b.bloecke, upload)
-    (b.ordner / "notion_bloecke.json").write_text(json.dumps(bloecke, ensure_ascii=False, indent=1), encoding="utf-8")
+    if trockenlauf or mit_seite:
+        bloecke = inhalt.als_notion_bloecke(b.bloecke, upload)
+        (b.ordner / "notion_bloecke.json").write_text(json.dumps(bloecke, ensure_ascii=False, indent=1), encoding="utf-8")
     if trockenlauf:
-        return ""
-    titel = f"Website-Check {b.lead.name} · {dt.date.fromisoformat(b.fakten['datum']).strftime('%d.%m.%Y')}"
-    seite = notion.seite_anlegen(eltern_id, titel, "📊", bloecke)
-    (b.ordner / "veroeffentlicht.json").write_text(json.dumps({"url": seite.get("url"), "id": seite.get("id")}), encoding="utf-8")
-    return seite.get("url", "")
+        return ergebnis
+    if b.pdf and b.pdf.exists():
+        ergebnis["pdf_id"] = notion.hochladen(b.pdf, name=pdf_dateiname(b))
+    if mit_seite and eltern_id:
+        titel = f"Website-Check {b.lead.name} · {dt.date.fromisoformat(b.fakten['datum']).strftime('%d.%m.%Y')}"
+        seite = notion.seite_anlegen(eltern_id, titel, "📊", bloecke)
+        ergebnis["url"] = seite.get("url", "")
+    (b.ordner / "veroeffentlicht.json").write_text(json.dumps(ergebnis), encoding="utf-8")
+    return ergebnis
+
+
+def lead_eigenschaften(b: Bericht, pdf_id: str = "", url: str = "") -> dict:
+    """Werte für die Report-Spalten im Leads-Board (Notion-API-Format)."""
+    werte: dict = {"Report-Score": {"number": b.gesamt}, "Report-Datum": {"date": {"start": b.fakten["datum"]}}}
+    if pdf_id:
+        werte["Report-PDF"] = {"files": [{"type": "file_upload", "file_upload": {"id": pdf_id}, "name": pdf_dateiname(b)}]}
+    if url:
+        werte["Report"] = {"url": url}
+    return werte
 
 
 def vergleichsgruppe(lead: ReportLead, alle: list[ReportLead], n: int = 5) -> list[dict]:
@@ -200,15 +244,14 @@ def lauf(leads: list[ReportLead], http: PoliteSession, opt: Optionen, *, notion=
         futures = [pool.submit(einer, lead) for lead in offen]
         for i, fut in enumerate(as_completed(futures), 1):
             b = fut.result()
-            ziel = b.lead.notion_page_id or eltern_id
+            ziel = b.lead.notion_page_id or (eltern_id if opt.mit_seite else "")
             soll = not b.fehler and (trockenlauf or (veroeffentlichen_an and notion is not None and ziel))
             if soll:
                 try:
-                    b.notion_url = veroeffentlichen(b, notion, ziel, trockenlauf)
-                    if b.notion_url and b.lead.notion_page_id:
-                        notion.seite_aktualisieren(b.lead.notion_page_id, {
-                            "Report-Score": {"number": b.gesamt}, "Report": {"url": b.notion_url},
-                            "Report-Datum": {"date": {"start": b.fakten["datum"]}}})
+                    erg = veroeffentlichen(b, notion, b.lead.notion_page_id or eltern_id, trockenlauf, opt.mit_seite)
+                    if not trockenlauf and b.lead.notion_page_id:
+                        notion.seite_aktualisieren(b.lead.notion_page_id, lead_eigenschaften(b, erg["pdf_id"], erg["url"]))
+                    b.notion_url = erg["url"] or (b.lead.notion_url if not trockenlauf else "")
                 except Exception as e:
                     log.exception("Veröffentlichen für %s fehlgeschlagen", b.lead.name)
                     b.fehler = f"Notion: {e}"

@@ -11,6 +11,7 @@ Beispiele:
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
 import sys
@@ -102,12 +103,15 @@ def report(args: argparse.Namespace, http: PoliteSession) -> None:
     if args.max:
         leads = leads[: args.max]
     if args.veroeffentlichen and args.notion:
-        notion.felder_sicherstellen(args.datenquelle)
+        from .report.notion import lead_felder
+        notion.felder_sicherstellen(args.datenquelle, lead_felder(args.mit_seite))
+    angebot = json.loads(Path(args.angebot).read_text(encoding="utf-8")) if args.angebot else None
 
     opt = lauf.Optionen(out=Path(args.out), agentur=args.agentur, max_seiten=args.max_seiten,
                         lighthouse_laeufe=args.lighthouse_laeufe, browser=not args.ohne_browser,
                         lighthouse=not args.ohne_lighthouse, observatory=not args.ohne_observatory,
-                        ki=not args.ohne_ki, neu_messen=args.neu, datum=dt.date.today())
+                        ki=not args.ohne_ki, neu_messen=args.neu, datum=dt.date.today(), pdf=not args.ohne_pdf,
+                        mit_seite=args.mit_seite, angebot=angebot, kontakt=args.kontakt)
 
     def fortschritt(i: int, n: int, b) -> None:
         status = b.fehler or f"{b.gesamt}/100" + (f" → {b.notion_url}" if b.notion_url else "")
@@ -169,8 +173,14 @@ def main(argv: list[str] | None = None) -> None:
     sp.add_argument("--datenquelle", default=os.environ.get("NOTION_LEADS_DATENQUELLE") or "88b8eea0-e22a-82b8-a85c-87d4690ec17b",
                     help="Notion-Data-Source-ID des Leads-Boards")
     sp.add_argument("--veroeffentlichen", action="store_true",
-                    help="Bericht als Unterseite des Leads in Notion anlegen und Report-Score/-Datum setzen")
-    sp.add_argument("--notion-seite", default="", help="Elternseite in Notion (mit --url/--leads und --veroeffentlichen)")
+                    help="PDF im Leads-Board anhängen (Spalte Report-PDF) und Report-Score/-Datum setzen")
+    sp.add_argument("--mit-seite", action="store_true", help="zusätzlich eine Notion-Unterseite je Lead anlegen")
+    sp.add_argument("--notion-seite", default="", help="Elternseite für --mit-seite (mit --url/--leads)")
+    sp.add_argument("--ohne-pdf", action="store_true", help="kein PDF erzeugen")
+    sp.add_argument("--angebot", default=os.environ.get("AGENTUR_ANGEBOT") or "",
+                    help='JSON mit Dauer/Preis je Paket, z.B. {"1": {"dauer": "1 Woche", "preis": "ab 390 €"}}')
+    sp.add_argument("--kontakt", default=os.environ.get("AGENTUR_KONTAKT") or "",
+                    help="Ansprechpartner am Ende des Berichts, z.B. Name · Telefon · E-Mail")
     sp.add_argument("--trockenlauf", action="store_true", help="Notion-Blöcke nur als JSON schreiben, nichts hochladen")
     sp.add_argument("--out", default="output/berichte")
     sp.add_argument("--agentur", default=os.environ.get("AGENTUR_NAME") or "GG Studios")
