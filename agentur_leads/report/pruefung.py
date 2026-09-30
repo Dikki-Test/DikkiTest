@@ -69,6 +69,11 @@ def _de(x: float, nd: int = 1) -> str:
     return f"{x:.{nd}f}".replace(".", ",")
 
 
+def _aufzaehlung(xs: list[str]) -> str:
+    """„A“, „A und B“, „A, B und C“."""
+    return " und ".join([", ".join(xs[:-1]), xs[-1]]) if len(xs) > 1 else "".join(xs)
+
+
 def _anteil(n: int, gesamt: int) -> float:
     return n / gesamt if gesamt else 0.0
 
@@ -108,12 +113,17 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
                        kurz=f"Auf dem Handy dauert es {_de(lcp)} s, bis der Hauptinhalt erscheint – Google empfiehlt höchstens 2,5 s." if lcp else "",
                        gut="Die Seite lädt auf dem Handy zügig."),
             Pruefpunkt("Erster Inhalt nach höchstens 1,8 s", fcp is not None and fcp <= 1.8, f"{_de(fcp)} s" if fcp else "", 2, "tempo",
+                       kurz=f"Auf dem Handy erscheinen erste Inhalte erst nach {_de(fcp)} s." if fcp else "",
                        gut="Erste Inhalte erscheinen schnell."),
             Pruefpunkt("Seite springt beim Laden nicht (CLS ≤ 0,1)", cls is not None and cls <= 0.1,
-                       _de(cls, 2) if cls is not None else "", 2, "tempo", gut="Das Layout springt beim Laden nicht."),
+                       _de(cls, 2) if cls is not None else "", 2, "tempo",
+                       kurz="Beim Laden springt das Layout – Besucher tippen leicht daneben.",
+                       gut="Das Layout springt beim Laden nicht."),
             Pruefpunkt("Datenmenge laut Lighthouse im grünen Bereich", bool(lh_m.get("gewicht_ok")),
                        f"{_de(gesamt_kb / 1024)} MB, davon {round(100 * bilder_kb / gesamt_kb)} % Bilder" if gesamt_kb else "",
-                       2, "tempo", gut="Die Datenmenge der Seite ist im grünen Bereich."),
+                       2, "tempo",
+                       kurz=f"Die Startseite lädt {_de(gesamt_kb / 1024)} MB – auf dem Handy spürbar langsam." if gesamt_kb else "",
+                       gut="Die Datenmenge der Seite ist im grünen Bereich."),
         ]
         if lh_d.get("lcp") is not None:
             t.punkte.append(Pruefpunkt("Computer: Hauptinhalt nach höchstens 2,5 s", lh_d["lcp"] <= 2.5,
@@ -146,7 +156,8 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
         gut="Ein Kontaktformular ist vorhanden."))
     oz = any(s.get("oeffnungszeiten") for s in seiten)
     e.punkte.append(Pruefpunkt("Öffnungs- bzw. Erreichbarkeitszeiten sichtbar", oz, "vorhanden" if oz else "nicht gefunden",
-                               2, "inhalte", gut="Öffnungszeiten sind auf der Website zu finden."))
+                               2, "inhalte", kurz="Wir haben auf der Website keine Öffnungs- oder Erreichbarkeitszeiten gefunden.",
+                               gut="Öffnungszeiten sind auf der Website zu finden."))
     viewport = sa.get("mobil_viewport", False)
     ueberbreit = br.get("handy_ueberbreite", False) if br_ok else False
     e.punkte.append(Pruefpunkt(
@@ -170,6 +181,7 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
         fehl = (lh_m.get("fehlgeschlagen") or {}).get("accessibility", [])
         e.punkte.append(Pruefpunkt("Barrierefreiheit laut Lighthouse mindestens 90", a11y >= 90,
                                    f"{a11y}/100" + (f": {fehl[0]}" if fehl and a11y < 90 else ""), 1, "seo_basis",
+                                   kurz=f"Bei der Barrierefreiheit erreicht die Seite laut Lighthouse nur {a11y} von 100 Punkten.",
                                    gut="Die Seite ist gut zugänglich, auch für Menschen mit Einschränkungen."))
 
     # --- Sicherheit & Datenschutz -----------------------------------------------------------
@@ -187,15 +199,18 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
     if https_ok:
         s_.punkte.append(Pruefpunkt("Alle Inhalte verschlüsselt geladen", unsicher == 0,
                                     f"{unsicher} Dateien über http:// eingebunden" if unsicher else "ja", 2, "https",
+                                    kurz=f"{unsicher} Dateien werden unverschlüsselt über http:// geladen.",
                                     gut="Alle Inhalte werden verschlüsselt geladen."))
     obs = f.get("observatory") or {}
     if obs.get("grade"):
         s_.punkte.append(Pruefpunkt("Sicherheits-Header gesetzt", obs["grade"] in GUTE_NOTEN,
                                     f"Mozilla Observatory: Note {obs['grade']} ({obs.get('score')}/100)", 2, "sicherheit",
+                                    kurz=f"Beim Sicherheitstest von Mozilla bekommt der Server nur die Note {obs['grade']}.",
                                     gut="Der Server setzt wichtige Sicherheits-Header."))
     elif srv.get("sicherheits_header"):
         n = sum(srv["sicherheits_header"].values())
         s_.punkte.append(Pruefpunkt("Sicherheits-Header gesetzt", n >= 4, f"{n} von 6 Sicherheits-Headern", 2, "sicherheit",
+                                    kurz=f"Der Server setzt nur {n} von 6 wichtigen Sicherheits-Headern.",
                                     gut="Der Server setzt wichtige Sicherheits-Header."))
     if srv.get("cms") == "WordPress" and srv.get("cms_version"):
         s_.punkte.append(Pruefpunkt("WordPress aktuell", srv.get("cms_ist_aktuell"),
@@ -212,6 +227,7 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
             gut="Die Server-Software (PHP) bekommt noch Sicherheitsupdates."))
     s_.punkte.append(Pruefpunkt("Admin-Zugang nicht öffentlich verlinkt", not srv.get("admin_link", False),
                                 "Admin-Link auf der Startseite" if srv.get("admin_link") else "nicht verlinkt", 1, "sicherheit",
+                                kurz="Der Admin-Zugang ist öffentlich auf der Website verlinkt.",
                                 gut="Der Admin-Zugang ist nicht öffentlich verlinkt."))
     s_.punkte.append(Pruefpunkt("Impressum verlinkt", bool(sa.get("impressum")), "vorhanden" if sa.get("impressum") else "nicht gefunden",
                                 4, "datenschutz", kurz="Auf der Website ist kein Impressum verlinkt (Abmahnrisiko).",
@@ -232,9 +248,9 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
         cookies = br.get("cookies_dritt", [])
         s_.punkte.append(Pruefpunkt(
             "Externe Dienste erst nach Einwilligung", not dienste,
-            (", ".join(dienste[:4]) + " laden ohne Zustimmung" + (f"; {len(cookies)} Cookies von Drittanbietern" if cookies else ""))
+            (_aufzaehlung(dienste[:4]) + " laden ohne Zustimmung" + (f"; {len(cookies)} Cookies von Drittanbietern" if cookies else ""))
             if dienste else "keine ohne Zustimmung", 4, "datenschutz",
-            kurz=f"{', '.join(dienste[:3])} laden, bevor Besucher zugestimmt haben." if dienste else "",
+            kurz=f"{_aufzaehlung(dienste[:3])} laden, bevor Besucher zugestimmt haben." if dienste else "",
             gut="Externe Dienste laden nicht ohne Zustimmung."))
     else:
         eingebettet = sorted({x for s in seiten for x in s.get("iframes", []) if any(d in x for d in ("youtube", "google.com/maps", "vimeo"))})
@@ -259,12 +275,15 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
                    else f"Nur {mit_desc} von {n} Seiten haben eine Beschreibung für die Google-Ergebnisse.",
                    gut="Die Seiten haben Beschreibungen für die Google-Ergebnisse."),
         Pruefpunkt("Eine Hauptüberschrift (H1) pro Seite", _anteil(eine_h1, n) >= 0.8, f"{eine_h1} von {n} Seiten korrekt", 2, "seo_basis",
+                   kurz=f"Nur {eine_h1} von {n} Seiten haben genau eine Hauptüberschrift – das erschwert Google die Einordnung.",
                    gut="Jede Seite hat eine klare Hauptüberschrift."),
         Pruefpunkt("Bildbeschreibungen (Alt-Texte)", None if not bilder else _anteil(ohne_alt, bilder) <= 0.2,
                    f"{ohne_alt} von {bilder} Bildern der Startseite ohne" if bilder else "keine Bilder", 2, "seo_basis",
+                   kurz=f"{ohne_alt} von {bilder} Bildern auf der Startseite fehlt eine Beschreibung für Google und Screenreader.",
                    gut="Die Bilder haben Beschreibungen (Alt-Texte)."),
         Pruefpunkt("Sprechende Seitenadressen", not query,
                    f"z. B. „{query[0].split('/')[-1][:30]}“ statt eines Namens wie „/ueber-uns“" if query else "ja", 2, "seo_technik",
+                   kurz=f"Die Seitenadressen bestehen aus Nummern wie „{query[0].split('/')[-1][:30]}“ statt sprechender Namen." if query else "",
                    gut="Die Seitenadressen sind sprechend (z. B. „/kontakt“)."),
         Pruefpunkt("Eine eindeutige Adresse", var.get("eindeutig") if var else None,
                    f"{var.get('erreichbare_varianten')} Varianten ohne Umleitung erreichbar" if var and not var.get("eindeutig") else "ja",
@@ -273,9 +292,11 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
                    if var and var.get("erreichbare_varianten") else "",
                    gut="Die Website ist unter genau einer Adresse erreichbar."),
         Pruefpunkt("Sitemap vorhanden", bool(rob.get("sitemap")), "vorhanden" if rob.get("sitemap") else "nicht gefunden", 2, "seo_technik",
+                   kurz="Es gibt keine Sitemap, die Google alle Seiten zeigt.",
                    gut="Eine Sitemap zeigt Google alle Seiten."),
         Pruefpunkt("robots.txt vorhanden", rob.get("robots_status") == 200 if rob else None,
                    "vorhanden" if rob.get("robots_status") == 200 else f"fehlt (Status {rob.get('robots_status')})", 1, "seo_technik",
+                   kurz="Es gibt keine robots.txt mit Hinweisen für Suchmaschinen.",
                    gut="Eine robots.txt ist vorhanden."),
         Pruefpunkt("Genug Text auf der Startseite", start.get("woerter", 0) >= 300,
                    f"ca. {start.get('woerter', 0)} Wörter inkl. Menü", 3, "inhalte",
@@ -287,6 +308,7 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
     if ort:
         o.punkte.append(Pruefpunkt("Ort im Seitentitel", ort.lower() in (sa.get("title") or "").lower(),
                                    f"„{(sa.get('title') or '')[:60]}“", 2, "seo_basis",
+                                   kurz=f"Der Ort fehlt im Seitentitel – ein Nachteil bei Suchen wie „{lead.get('kategorie') or 'Anbieter'} {ort}“.",
                                    gut="Der Ort steht im Seitentitel – gut für lokale Suchen."))
 
     # --- KI-Auffindbarkeit ------------------------------------------------------------------
@@ -313,9 +335,11 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
     if branche == GASTRO:
         q.punkte.append(Pruefpunkt("Speisekarte als Text auf der Website", fn.get("speisekarte_art") == "html",
                                    {"html": "als Seite vorhanden", "pdf": "nur als PDF"}.get(fn.get("speisekarte_art", ""), "nicht gefunden"),
-                                   3, "kernfunktion", gut="Die Speisekarte steht als eigene Seite auf der Website."))
+                                   3, "kernfunktion", kurz="Die Speisekarte steht nicht als Text auf der Website – KI-Assistenten können Ihre Gerichte nicht zitieren.",
+                                   gut="Die Speisekarte steht als eigene Seite auf der Website."))
     q.punkte.append(Pruefpunkt("llms.txt (Kurzprofil für KI-Systeme)", bool(rob.get("llms_txt")) if rob else None,
                                "vorhanden" if rob.get("llms_txt") else "fehlt", 1, "ki_daten",
+                               kurz="Es gibt keine llms.txt, die Ihr Unternehmen KI-Systemen vorstellt.",
                                gut="Eine llms.txt stellt Ihr Unternehmen KI-Systemen vor."))
     if ki and ki.get("gesamt"):
         q.punkte.append(Pruefpunkt(
@@ -345,6 +369,7 @@ def bewerte(f: dict, heute: dt.date | None = None) -> list[Bereich]:
                                kurz="Auf Instagram sind Sie nicht zu finden.", gut="Sie sind auf Instagram vertreten."))
     c.punkte.append(Pruefpunkt("Social-Profile auf der Website verlinkt", bool(links),
                                ", ".join(sorted(links)) if links else "keine Links", 2, "social",
+                               kurz="Ihre Social-Media-Profile sind auf der Website nicht verlinkt.",
                                gut="Ihre Social-Media-Profile sind auf der Website verlinkt."))
     upload = max((j for s in seiten for j in s.get("upload_jahre", [])), default=None)
     c.punkte.append(Pruefpunkt("Aktuelle Fotos auf der Website", None if upload is None else upload >= heute.year - 2,
@@ -409,15 +434,21 @@ def gesamtnote(bereiche: list[Bereich]) -> int:
     return round(statistics.mean(werte)) if werte else 0
 
 
-def massnahmen(bereiche: list[Bereich], branche: str, gesamt: int) -> list[Massnahme]:
-    """Maßnahmen aus nicht erfüllten Prüfpunkten, sortiert nach Gewicht; bei schwachem Gesamtbild ein Relaunch."""
+def _gewichte(bereiche: list[Bereich], relaunch: bool) -> dict[str, int]:
+    """Summe der Gewichte nicht erfüllter Prüfpunkte je Maßnahme; ein Relaunch zählt dann als wichtigste."""
     gewicht: dict[str, int] = {}
     for b in bereiche:
         for p in b.punkte:
             if p.ok is False and p.massnahme:
                 gewicht[p.massnahme] = gewicht.get(p.massnahme, 0) + p.gewicht
-    if gesamt < 45 or "relaunch" in gewicht:
+    if relaunch or "relaunch" in gewicht:
         gewicht["relaunch"] = max(gewicht.get("relaunch", 0), max(gewicht.values(), default=0) + 1)
+    return gewicht
+
+
+def massnahmen(bereiche: list[Bereich], branche: str, gesamt: int) -> list[Massnahme]:
+    """Maßnahmen aus nicht erfüllten Prüfpunkten, sortiert nach Gewicht; bei schwachem Gesamtbild ein Relaunch."""
+    gewicht = _gewichte(bereiche, gesamt < 45)
     liste = []
     for i, key in enumerate(sorted(gewicht, key=lambda x: (MASSNAHMEN[x][3], -gewicht[x]))):
         text, aufwand, wirkung, paket, _ = MASSNAHMEN[key]
@@ -434,11 +465,7 @@ def nutzen(key: str, branche: str) -> str:
 
 
 def hebel(bereiche: list[Bereich], ms: list[Massnahme], n: int = 3) -> list[Massnahme]:
-    gewicht: dict[str, int] = {}
-    for b in bereiche:
-        for p in b.punkte:
-            if p.ok is False and p.massnahme:
-                gewicht[p.massnahme] = gewicht.get(p.massnahme, 0) + p.gewicht
+    gewicht = _gewichte(bereiche, any(m.key == "relaunch" for m in ms))
     return sorted([m for m in ms if m.key in gewicht], key=lambda m: (-gewicht[m.key] * m.wirkung / m.aufwand ** 0.5))[:n]
 
 

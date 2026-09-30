@@ -211,7 +211,8 @@ def _ki_abschnitt(f: dict, bilder: dict[str, Path], lead: dict) -> list[Block]:
 
 def _methodik(f: dict, datum: dt.date) -> list[str]:
     lh = (f.get("lighthouse") or {}).get("mobil") or {}
-    zeilen = [f"Alle Messungen am {datum.strftime('%d.%m.%Y')}."]
+    gemessen = dt.date.fromisoformat(f["datum"]) if f.get("datum") else datum
+    zeilen = [f"Alle Messungen am {gemessen.strftime('%d.%m.%Y')}."]
     if lh.get("scores"):
         laeufe = f", Median aus {len(lh['laeufe'])} Messungen" if lh.get("laeufe") and len(lh["laeufe"]) >= 3 else ""
         zeilen.append(f"**Ladezeit:** Google Lighthouse {lh.get('version', '')} ({lh.get('quelle', 'lokal gemessen')}{laeufe}), "
@@ -220,7 +221,8 @@ def _methodik(f: dict, datum: dt.date) -> list[str]:
         "**Sicherheit:** Mozilla HTTP Observatory und eigene Auswertung der Server-Antworten.",
         "**Datenschutz:** automatischer Browser-Aufruf ohne Einwilligung; erfasst wurden aufgerufene Dienste und Cookies.",
         f"**SEO:** Auswertung von {len(f.get('seiten', []))} Seiten der Website.",
-        "**KI-Auffindbarkeit:** robots.txt, Strukturdaten und llms.txt"
+        "**KI-Auffindbarkeit:** robots.txt (KI-Suchdienste wie OAI-SearchBot, Claude-SearchBot und PerplexityBot getrennt "
+        "von reinen Trainings-Crawlern; nur gesperrte Suchdienste zählen als Mangel), Strukturdaten und llms.txt"
         + (", dazu eine Stichprobe mit einem KI-Assistenten mit Websuche." if f.get("ki_suche") else "."),
         "**Punkte:** je Bereich der Anteil erfüllter Prüfpunkte, bei „Ladezeit & Technik“ der Lighthouse-Leistungswert "
         "(Handy). Die Gesamtnote ist der Durchschnitt der Bereiche.",

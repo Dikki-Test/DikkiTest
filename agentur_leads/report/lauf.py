@@ -20,6 +20,7 @@ from . import diagramme, inhalt, messung, pruefung
 from .modelle import Bereich, Massnahme, ReportLead
 
 log = logging.getLogger(__name__)
+MAX_ALTER_TAGE = 14  # ältere Messungen werden neu erhoben, damit Berichte aktuell sind
 
 
 @dataclass
@@ -138,8 +139,9 @@ def erstelle_bericht(lead: ReportLead, http: PoliteSession, opt: Optionen, vergl
     ordner.mkdir(parents=True, exist_ok=True)
     b = Bericht(lead=lead, ordner=ordner)
     pfad = ordner / "fakten.json"
-    if pfad.exists() and not opt.neu_messen:
-        b.fakten = json.loads(pfad.read_text(encoding="utf-8"))
+    alt = json.loads(pfad.read_text(encoding="utf-8")) if pfad.exists() and not opt.neu_messen else {}
+    if alt and (opt.datum - dt.date.fromisoformat(alt.get("datum", "1970-01-01"))).days <= MAX_ALTER_TAGE:
+        b.fakten = alt  # fortgesetzter Lauf: frische Messung wiederverwenden
     else:
         b.fakten = messen(lead, http, ordner, opt)
         pfad.write_text(json.dumps(b.fakten, ensure_ascii=False, indent=1), encoding="utf-8")

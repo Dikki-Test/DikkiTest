@@ -199,3 +199,16 @@ def test_matrix_punkte_bleiben_im_quadranten():
         assert (nx < 3) == (x < 3) and (ny < 3) == (y < 3) and abs(nx - 3) >= 0.22 and abs(ny - 3) >= 0.3
         assert all(((nx - a) / 0.36) ** 2 + ((ny - b) / 0.5) ** 2 >= 1 for a, b in belegt)  # Kreise überlappen nicht
         belegt.append((nx, ny))
+
+
+def test_aufzaehlung_und_neue_website_als_hebel():
+    assert pruefung._aufzaehlung(["A"]) == "A" and pruefung._aufzaehlung(["A", "B", "C"]) == "A, B und C"
+    bereiche = pruefung.bewerte(fakten_restaurant(), HEUTE)
+    assert "YouTube und Google Maps laden ohne Zustimmung" in punkt(bereiche, "Externe Dienste").befund
+    ms = pruefung.massnahmen(bereiche, "Gastronomie", pruefung.gesamtnote(bereiche))
+    assert "relaunch" in [m.key for m in pruefung.hebel(bereiche, ms)]  # schwaches Gesamtbild → neue Website unter den Hebeln
+
+
+def test_jeder_mangel_hat_einen_kurzsatz():
+    bereiche = pruefung.bewerte(fakten_restaurant(), HEUTE)
+    assert [p.text for b in bereiche for p in b.punkte if p.ok is False and not p.kurz] == []
