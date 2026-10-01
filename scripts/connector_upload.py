@@ -30,7 +30,8 @@ def zeilen(pfad: Path) -> list[dict]:
 
 
 def erledigt() -> set[str]:
-    return {z["slug"] for z in zeilen(ERLEDIGT)}
+    """Über den Connector markiert oder vom Gesamtlauf per NOTION_TOKEN veröffentlicht."""
+    return {z["slug"] for z in zeilen(ERLEDIGT)} | {p.parent.name for p in OUT.glob("*/veroeffentlicht.json")}
 
 
 def dateiname(z: dict) -> str:

@@ -85,3 +85,29 @@ def test_veroeffentlichen_haengt_pdf_an_den_lead(tmp_path):
     assert veroeffentlichen(b, mit_seite, "lead1", mit_seite=True)["url"] == "https://www.notion.so/s1"
     assert ("seite", "lead1") in mit_seite.aufrufe
     assert "Report-PDF" in lead_felder() and "Report" not in lead_felder() and "Report" in lead_felder(mit_seite=True)
+
+
+def test_lauf_veroeffentlicht_pdf_per_token(tmp_path, monkeypatch):
+    from agentur_leads.report import lauf as lauf_modul
+
+    class TokenNotion(FakeNotion):
+        def seite_aktualisieren(self, page_id, properties):
+            self.aufrufe.append(("aktualisieren", page_id, sorted(properties)))
+
+    def bericht(lead, http, opt, vergleich=None):
+        ordner = opt.out / lead.slug
+        ordner.mkdir(parents=True, exist_ok=True)
+        (ordner / "bericht.pdf").write_bytes(b"%PDF-1.7")
+        return Bericht(lead=lead, ordner=ordner, fakten={"datum": "2026-10-01"}, gesamt=61,
+                       bereiche=[object()], bloecke=[inhalt.P("x")], pdf=ordner / "bericht.pdf")
+
+    monkeypatch.setattr(lauf_modul, "erstelle_bericht", bericht)
+    monkeypatch.setattr(lauf_modul, "schreibe_uebersicht", lambda *a: None)
+    n = TokenNotion()
+    lead = ReportLead("Lotus Garten", "http://lotus-garten.de/", notion_page_id="lead1", notion_url="https://notion.so/lead1")
+    opt = lauf_modul.Optionen(out=tmp_path)
+    [b] = lauf_modul.lauf([lead], None, opt, notion=n, veroeffentlichen_an=True)
+    assert n.aufrufe == [("hochladen", "Website-Check Lotus Garten 2026-10-01.pdf"),
+                         ("aktualisieren", "lead1", ["Report-Datum", "Report-PDF", "Report-Score"])]
+    assert b.notion_url == "https://notion.so/lead1" and (b.ordner / "veroeffentlicht.json").exists()
+    assert lauf_modul.lauf([lead], None, opt, notion=n, veroeffentlichen_an=True) == []  # schon veröffentlicht

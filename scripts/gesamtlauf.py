@@ -1,7 +1,8 @@
 """Gesamtlauf für viele Leads aus einem Notion-Export: Berichte und PDFs lokal erzeugen, Fortschritt protokollieren.
 
-Für die Veröffentlichung über den Notion-Connector (siehe connector_upload.py), wenn kein NOTION_TOKEN gesetzt
-ist. Mit Token geht alles in einem Schritt: agentur-leads report --notion --veroeffentlichen --schnell
+Ist NOTION_TOKEN gesetzt, hängt das Skript jedes fertige PDF selbst im Leads-Board an (Report-PDF, -Score,
+-Datum) – ohne weitere Schritte. Ohne Token entstehen die Berichte nur lokal; veröffentlicht wird dann über den
+Notion-Connector (siehe connector_upload.py).
 
   python scripts/gesamtlauf.py output/berichte/leads_export.json [--max N] [--parallel 3] [--ki]
 
@@ -15,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import time
 from pathlib import Path
 
@@ -47,17 +49,23 @@ def main() -> None:
     if args.max:
         leads = leads[: args.max]
     opt = lauf.Optionen(out=out, lighthouse_laeufe=3, lighthouse_schnell=True, ki=args.ki)
+    notion = None
+    if os.environ.get("NOTION_TOKEN"):
+        from agentur_leads.report.notion import Notion
+        notion = Notion(os.environ["NOTION_TOKEN"])
     status, start = out / "status.jsonl", time.time()
 
     def fortschritt(i: int, n: int, b) -> None:
         zeile = {"i": i, "n": n, "slug": b.lead.slug, "name": b.lead.name, "page_id": b.lead.notion_page_id,
                  "gesamt": b.gesamt if b.bereiche else None, "pdf": str(b.pdf) if b.pdf else "",
-                 "fehler": b.fehler, "datum": b.fakten.get("datum", ""), "sek": round(time.time() - start)}
+                 "fehler": b.fehler, "datum": b.fakten.get("datum", ""), "sek": round(time.time() - start),
+                 "veroeffentlicht": bool(notion and not b.fehler and (b.ordner / "veroeffentlicht.json").exists())}
         with status.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(zeile, ensure_ascii=False) + "\n")
 
-    print(f"{len(leads)} Leads", flush=True)
-    lauf.lauf(leads, PoliteSession(), opt, trockenlauf=True, parallel=args.parallel, fortschritt=fortschritt)
+    print(f"{len(leads)} Leads" + (" – PDFs werden per NOTION_TOKEN angehängt" if notion else ""), flush=True)
+    lauf.lauf(leads, PoliteSession(), opt, notion=notion, veroeffentlichen_an=notion is not None,
+              trockenlauf=notion is None, parallel=args.parallel, fortschritt=fortschritt)
     print("fertig", round(time.time() - start), "s", flush=True)
 
 
