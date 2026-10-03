@@ -4,11 +4,13 @@ Ist NOTION_TOKEN gesetzt, hängt das Skript jedes fertige PDF selbst im Leads-Bo
 -Datum) – ohne weitere Schritte. Ohne Token entstehen die Berichte nur lokal; veröffentlicht wird dann über den
 Notion-Connector (siehe connector_upload.py).
 
-  python scripts/gesamtlauf.py output/berichte/leads_export.json [--max N] [--parallel 3] [--ki]
+  python scripts/gesamtlauf.py output/berichte/leads_export.json [--max N] [--parallel 3] [--ki] [--alle]
 
 Reihenfolge: Potenzial Hoch → Mittel → Niedrig. Fortsetzbar: frische Messungen (≤ 14 Tage) werden
 wiederverwendet, veröffentlichte Leads (veroeffentlicht.json bzw. Report-Datum im Export) übersprungen.
-Jeder fertige Lead wird als Zeile in <out>/status.jsonl festgehalten.
+Jeder fertige Lead wird als Zeile in <out>/status.jsonl festgehalten. Ohne Token überspringt ein neuer Block
+außerdem Leads aus status.jsonl, deren PDF schon vorliegt oder deren Website nicht erreichbar war;
+--alle nimmt sie wieder mit (z. B. um Fehlschläge erneut zu versuchen).
 """
 
 from __future__ import annotations
@@ -27,6 +29,14 @@ from agentur_leads.report.quelle import AUSSCHLIESSEN, lead_aus_zeile
 RANG = {"Hoch": 0, "Mittel": 1, "Niedrig": 2}
 
 
+def bekannte_slugs(status: Path, out: Path) -> set[str]:
+    """Leads aus früheren Blöcken: PDF liegt schon vor oder die Website war nicht erreichbar."""
+    if not status.exists():
+        return set()
+    zeilen = [json.loads(z) for z in status.read_text(encoding="utf-8").splitlines() if z.strip()]
+    return {z["slug"] for z in zeilen if z.get("fehler") or (out / z["slug"] / "bericht.pdf").exists()}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("export", help="JSON mit flachen Board-Zeilen (Liste oder {'results': [...]})")
@@ -34,6 +44,7 @@ def main() -> None:
     ap.add_argument("--max", type=int, default=0)
     ap.add_argument("--parallel", type=int, default=3)
     ap.add_argument("--ki", action="store_true", help="KI-Stichprobe (braucht ANTHROPIC_API_KEY, kostet)")
+    ap.add_argument("--alle", action="store_true", help="fertige PDFs und Fehlschläge aus status.jsonl erneut angehen")
     args = ap.parse_args()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -46,14 +57,18 @@ def main() -> None:
               and z.get("Status") not in ("Verloren", "Gewonnen")]
     zeilen.sort(key=lambda z: (RANG.get(z.get("Potenzial"), 3), z.get("Branche") or "", z.get("Name") or ""))
     leads = [lead_aus_zeile(z) for z in zeilen]
+    status, start = out / "status.jsonl", time.time()
+    token = os.environ.get("NOTION_TOKEN")
+    if not token and not args.alle:  # fertige PDFs warten nur noch auf den Connector – nicht neu rendern
+        bekannt = bekannte_slugs(status, out)
+        leads = [x for x in leads if x.slug not in bekannt]
     if args.max:
         leads = leads[: args.max]
     opt = lauf.Optionen(out=out, lighthouse_laeufe=3, lighthouse_schnell=True, ki=args.ki)
     notion = None
-    if os.environ.get("NOTION_TOKEN"):
+    if token:
         from agentur_leads.report.notion import Notion
-        notion = Notion(os.environ["NOTION_TOKEN"])
-    status, start = out / "status.jsonl", time.time()
+        notion = Notion(token)
 
     def fortschritt(i: int, n: int, b) -> None:
         zeile = {"i": i, "n": n, "slug": b.lead.slug, "name": b.lead.name, "page_id": b.lead.notion_page_id,
