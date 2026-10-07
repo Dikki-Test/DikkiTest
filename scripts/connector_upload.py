@@ -11,11 +11,15 @@ Ablauf je Paket (Claude mit Notion-Connector):
 
 Weitere Befehle: stand (Fortschritt), export DATEI … (Antworten der Board-Abfrage im Ansichtsmodus zu
 output/berichte/leads_export.json zusammenführen).
+
+Mit NOTION_TOKEN: token [N] hängt die fertigen PDFs direkt per Notion-API an – ohne Connector, ohne
+Freigaben und ohne neu zu messen.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -90,6 +94,30 @@ def export(dateien: list[str]) -> None:
     print(json.dumps({"zeilen": len(alle), "mit_website": mit_web, "schon_mit_report": fertig}))
 
 
+def mit_token(k: int) -> None:
+    """Fertige PDFs direkt per NOTION_TOKEN anhängen – ohne Connector, ohne Freigaben, ohne neu zu messen."""
+    from agentur_leads.report.lauf import Bericht, lead_eigenschaften, pdf_dateiname
+    from agentur_leads.report.modelle import ReportLead
+    from agentur_leads.report.notion import Notion
+
+    token = os.environ.get("NOTION_TOKEN")
+    if not token:
+        sys.exit("NOTION_TOKEN fehlt")
+    notion, liste = Notion(token), offen(k)
+    for i, z in enumerate(liste, 1):
+        b = Bericht(lead=ReportLead(z["name"], "", notion_page_id=z["page_id"]), ordner=OUT / z["slug"],
+                    fakten={"datum": z["datum"]}, gesamt=z["gesamt"], pdf=OUT / z["slug"] / "bericht.pdf")
+        try:
+            pdf_id = notion.hochladen(b.pdf, pdf_dateiname(b))
+            notion.seite_aktualisieren(z["page_id"], lead_eigenschaften(b, pdf_id))
+        except (OSError, requests.RequestException, RuntimeError) as e:  # ein Fehlschlag hält den Rest nicht auf
+            print(json.dumps({"i": i, "slug": z["slug"], "ok": False, "fehler": str(e)[:200]}, ensure_ascii=False),
+                  flush=True)
+            continue
+        markieren([z["slug"]])
+        print(json.dumps({"i": i, "n": len(liste), "slug": z["slug"], "ok": True}, ensure_ascii=False), flush=True)
+
+
 if __name__ == "__main__":
     befehl, rest = sys.argv[1], sys.argv[2:]
     if befehl == "offen":
@@ -100,5 +128,7 @@ if __name__ == "__main__":
         markieren(rest)
     elif befehl == "stand":
         stand()
+    elif befehl == "token":
+        mit_token(int(sys.argv[2]) if len(sys.argv) > 2 else 100000)
     elif befehl == "export":
         export(rest)
