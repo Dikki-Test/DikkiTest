@@ -1,0 +1,22 @@
+services:
+  ade-abrechnung:
+    build: .
+    container_name: ade-abrechnung
+    restart: unless-stopped
+    environment:
+      GROUP_KEY: ${GROUP_KEY:?Bitte GROUP_KEY in der .env-Datei setzen}
+    volumes:
+      - ade-daten:/data
+    ports:
+      - "8088:8080"
+    # Läuft der Nginx Proxy Manager selbst in Docker, geht statt "ports" auch sein Netzwerk.
+    # Dann im Proxy Manager als Ziel "ade-abrechnung", Port 8080 eintragen.
+    # networks: [proxy]
+
+volumes:
+  ade-daten:
+
+# networks:
+#   proxy:
+#     external: true
+#     name: nginx-proxy-manager_default   # echten Namen mit "docker network ls" nachsehen

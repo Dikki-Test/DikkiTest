@@ -1,0 +1,2015 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ADE Kasse">
+<title>ADE 2026 · Abrechnung</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d4ff3a'/%3E%3Cg fill='%230b0b0e'%3E%3Crect x='6' y='13' width='3.5' height='12' rx='1.75'/%3E%3Crect x='11.5' y='7' width='3.5' height='18' rx='1.75'/%3E%3Crect x='17' y='15' width='3.5' height='10' rx='1.75'/%3E%3Crect x='22.5' y='10' width='3.5' height='15' rx='1.75'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+/* Space Grotesk (latin) – SIL Open Font License 1.1. Eingebettet, damit keine Anfragen an Google gehen. */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,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) format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #0b0b0e;
+  --surface: #15151b;
+  --surface-2: #1d1d25;
+  --surface-3: #2a2a35;
+  --line: rgba(255, 255, 255, .08);
+  --line-strong: rgba(255, 255, 255, .16);
+  --text: #f4f4f6;
+  --text-2: #c5c5ce;
+  --muted: #8e8e9a;
+  --accent: #d4ff3a;
+  --accent-ink: #0b0b0e;
+  --pos: #3987e5;   /* bekommt Geld */
+  --neg: #e66767;   /* muss zahlen */
+  --axis: #3a3a44;
+  --good: #0ca30c;
+  --warn: #fab219;
+  --bad: #d03b3b;
+  --danger: #ff8080;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --tabbar: 66px;
+  --font: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 16px/1.45 var(--font);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 45% at 0% 0%, rgba(124, 92, 255, .22), transparent 70%),
+    radial-gradient(55% 35% at 100% 4%, rgba(212, 255, 58, .10), transparent 70%);
+}
+body:has(dialog[open]) { overflow: hidden; }
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-user-select: none; user-select: none; }
+button:disabled { cursor: not-allowed; opacity: .35; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--tabbar) + 110px + env(safe-area-inset-bottom));
+}
+
+/* --- Kopfzeile ----------------------------------------------------------- */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin: 0 -16px;
+  padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+  background: rgba(11, 11, 14, .74);
+  -webkit-backdrop-filter: saturate(150%) blur(18px);
+  backdrop-filter: saturate(150%) blur(18px);
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand > div { min-width: 0; }
+.mark {
+  flex: none; width: 42px; height: 42px; border-radius: 13px;
+  display: grid; place-items: center;
+  background: var(--accent); color: var(--accent-ink);
+  box-shadow: 0 6px 24px rgba(212, 255, 58, .22);
+}
+.brand h1 { font-size: 20px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+.brand p { font-size: 13px; color: var(--muted); }
+.brand h1, .brand p { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pill {
+  flex: none; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 36px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--line-strong); background: var(--surface);
+  font-size: 13px; font-weight: 600; color: var(--text-2);
+}
+.dot { display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.dot.pos { background: var(--pos); }
+.dot.neg { background: var(--neg); }
+.status-server .dot { background: var(--good); box-shadow: 0 0 0 4px rgba(12, 163, 12, .2); }
+.status-offline .dot { background: var(--warn); }
+.status-locked .dot { background: var(--bad); }
+
+/* --- Karten -------------------------------------------------------------- */
+.card {
+  margin-top: 14px; padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.card-title {
+  margin-bottom: 12px;
+  font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted);
+}
+.card > .muted { font-size: 15px; }
+.card > * + .muted, .card > .muted + * { margin-top: 10px; }
+.hint { margin-top: 12px; font-size: 13px; color: var(--muted); }
+
+.hero {
+  padding: 22px 20px 20px;
+  background:
+    linear-gradient(135deg, rgba(212, 255, 58, .09), rgba(124, 92, 255, .12)),
+    var(--surface);
+  border-color: rgba(255, 255, 255, .1);
+}
+.hero-total { margin: 4px 0 8px; font-size: clamp(42px, 13vw, 60px); font-weight: 700; letter-spacing: -.035em; line-height: 1.02; }
+.hero-meta { color: var(--text-2); font-size: 15px; }
+.me-line {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 17px;
+}
+.me-line strong { font-weight: 700; }
+
+.banner {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-top: 14px; padding: 14px 14px 14px 16px;
+  border-radius: var(--radius);
+  background: rgba(212, 255, 58, .08);
+  border: 1px solid rgba(212, 255, 58, .3);
+  font-size: 14px; color: var(--text-2);
+}
+.banner strong { color: var(--text); }
+
+.empty { text-align: center; padding: 28px 22px; }
+.empty-emoji { font-size: 40px; line-height: 1; }
+.empty h2 { margin-top: 12px; font-size: 20px; }
+.empty .muted { margin: 8px auto 18px; max-width: 34ch; }
+
+/* --- Buttons & Chips ----------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 46px; padding: 0 18px;
+  border-radius: 999px; border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-weight: 600; text-decoration: none; white-space: nowrap;
+}
+.btn:hover { background: var(--surface-3); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: #e2ff70; }
+.btn-ghost { background: transparent; }
+.btn-danger { color: var(--danger); background: transparent; }
+.btn-small { min-height: 38px; padding: 0 14px; font-size: 14px; }
+.btn-block { width: 100%; white-space: normal; text-align: center; }
+.btn-grow { flex: 1; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.icon-btn {
+  display: inline-grid; place-items: center; flex: none;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--line-strong); background: var(--surface-2);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips.scroll {
+  flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+  margin: 0 -18px; padding: 2px 18px;
+}
+.chips.scroll::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 42px; padding: 0 15px;
+  border-radius: 999px; border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-weight: 500; white-space: nowrap;
+}
+.chip .avatar { margin-left: -8px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.chip[aria-pressed="true"] .avatar { background: var(--accent-ink); color: var(--accent); }
+
+.avatar {
+  --size: 32px;
+  display: inline-grid; place-items: center; flex: none;
+  width: var(--size); height: var(--size); border-radius: 50%;
+  background: var(--surface-3); color: var(--text);
+  font-size: calc(var(--size) * .44); font-weight: 700; line-height: 1;
+}
+.avatar.is-me { box-shadow: 0 0 0 2px var(--accent); }
+.tag {
+  display: inline-block; margin-left: 6px; padding: 1px 7px;
+  border-radius: 999px; background: var(--surface-3);
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; color: var(--text-2);
+  vertical-align: 2px;
+}
+
+/* --- Wer zahlt wem ------------------------------------------------------- */
+.transfer { padding: 16px 0; border-top: 1px solid var(--line); }
+.transfer:first-of-type { border-top: 0; padding-top: 6px; }
+.transfer-who { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-width: 0; font-weight: 600; }
+.person { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.person-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.arrow { display: inline-flex; color: var(--muted); }
+.transfer-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 12px; margin-top: 10px; }
+.transfer-amount { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+.transfer-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.transfer.is-mine .transfer-amount { color: var(--accent); }
+.all-square { padding: 6px 0 4px; font-size: 17px; font-weight: 600; }
+.share-btn { margin-top: 14px; }
+
+/* --- Kontostand (divergierende Balken) ----------------------------------- */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; margin: -2px 0 6px; font-size: 13px; color: var(--muted); }
+.legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.bal-row { padding: 10px 0 8px; }
+.bal-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.bal-name { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bal-text { flex: none; color: var(--text-2); font-size: 14px; }
+.bal-track { position: relative; height: 10px; margin-top: 8px; border-radius: 5px; background: rgba(255, 255, 255, .035); }
+.bal-track::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.bal-bar { position: absolute; top: 0; bottom: 0; }
+.bal-bar.pos { left: calc(50% + 1px); background: var(--pos); border-radius: 0 4px 4px 0; }
+.bal-bar.neg { right: 50%; background: var(--neg); border-radius: 4px 0 0 4px; }
+
+/* --- Kategorien ---------------------------------------------------------- */
+.cat-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 7px 0; }
+.cat-label { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cat-value { font-size: 14px; color: var(--text-2); }
+.cat-track { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, .035); }
+.cat-bar { height: 100%; min-width: 4px; border-radius: 0 4px 4px 0; background: var(--accent); }
+
+/* --- Tabelle ------------------------------------------------------------- */
+.table-wrap { overflow-x: auto; margin: 0 -18px; padding: 0 18px; }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+@media (max-width: 380px) { .table { font-size: 13px; } }
+.table th, .table td { padding: 10px 0 10px 10px; text-align: right; white-space: nowrap; }
+.table thead th { padding-top: 0; font-size: 12px; font-weight: 500; color: var(--muted); }
+.table tbody th { padding-left: 0; text-align: left; font-weight: 600; max-width: 30vw; overflow: hidden; text-overflow: ellipsis; }
+.table tbody tr { border-top: 1px solid var(--line); }
+
+/* --- Ausgabenliste ------------------------------------------------------- */
+.list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 22px 4px 0; }
+.list-head h2 { font-size: 24px; letter-spacing: -.02em; }
+.day {
+  display: flex; justify-content: space-between; gap: 12px;
+  margin: 22px 4px 8px;
+  font-size: 13px; font-weight: 600; letter-spacing: .02em; color: var(--text-2);
+}
+.day .muted { font-weight: 500; }
+.list { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.row {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  width: 100%; padding: 12px 14px;
+  background: none; border: 0; border-top: 1px solid var(--line);
+  text-align: left;
+}
+.row:first-child { border-top: 0; }
+.row:hover { background: rgba(255, 255, 255, .03); }
+.row-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: var(--surface-2); font-size: 22px;
+}
+.row-main { display: flex; flex-direction: column; min-width: 0; }
+.row-title, .row-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row-title { font-weight: 600; }
+.row-sub { font-size: 13px; color: var(--muted); }
+.row-amount { align-self: start; margin-top: 1px; font-weight: 700; white-space: nowrap; }
+.row-me { display: inline-flex; align-items: center; gap: 6px; margin-top: 3px; font-size: 13px; color: var(--text-2); white-space: nowrap; }
+
+/* --- Gruppe -------------------------------------------------------------- */
+.field {
+  display: block; width: 100%; min-height: 48px; padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  -webkit-appearance: none; appearance: none;
+}
+.field::placeholder, .mini-input::placeholder, .amount-input::placeholder { color: #6c6c78; }
+.field:focus, .mini-input:focus { outline: none; border-color: var(--accent); }
+.field-small { min-height: 42px; padding: 8px 12px; }  /* 16px Schrift, sonst zoomt iOS beim Antippen */
+input[type="date"].field { text-align: left; }
+input[type="date"]::-webkit-date-and-time-value { text-align: left; }
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.8); }
+.label {
+  display: block; margin: 20px 0 8px;
+  font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.card .label:first-of-type { margin-top: 0; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+.member { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.member:first-of-type { border-top: 0; padding-top: 0; }
+.member .avatar { margin-top: 4px; }
+.member-fields { flex: 1; display: grid; gap: 8px; min-width: 0; }
+.sync-state { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.stand { margin-top: 12px; font-size: 13px; color: var(--text-2); }
+.card .btn-block { margin-top: 14px; }
+.footnote { margin: 22px 4px 0; font-size: 12px; color: var(--muted); }
+
+/* --- Floating Button & Tabs ---------------------------------------------- */
+.fab {
+  position: fixed; z-index: 20;
+  right: max(16px, calc(50% - 300px + 16px));
+  bottom: calc(var(--tabbar) + 14px + env(safe-area-inset-bottom));
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 56px; padding: 0 22px 0 18px;
+  border: 0; border-radius: 999px;
+  background: var(--accent); color: var(--accent-ink);
+  font-size: 16px; font-weight: 700;
+  box-shadow: 0 10px 30px rgba(212, 255, 58, .25), 0 4px 14px rgba(0, 0, 0, .45);
+}
+.tabbar {
+  position: fixed; z-index: 15; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: center; gap: 4px;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(11, 11, 14, .86);
+  -webkit-backdrop-filter: saturate(150%) blur(18px);
+  backdrop-filter: saturate(150%) blur(18px);
+  border-top: 1px solid var(--line);
+}
+.tabbar button {
+  flex: 1; max-width: 180px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 0; border: 0; border-radius: 12px;
+  background: none; color: var(--muted);
+  font-size: 12px; font-weight: 600;
+}
+.tabbar button[aria-current="page"] { color: var(--text); }
+.tabbar button[aria-current="page"] svg { color: var(--accent); }
+
+/* --- Dialoge (Bottom Sheet) ---------------------------------------------- */
+dialog.sheet {
+  position: fixed; inset: auto 0 0 0;
+  width: 100%; max-width: 560px; max-height: 92vh; max-height: 92dvh;
+  margin: 0 auto; padding: 0;
+  border: 1px solid var(--line-strong); border-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  background: var(--surface); color: var(--text);
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, .55);
+}
+dialog.sheet[open] { display: flex; flex-direction: column; animation: sheet-in .22s ease-out; }
+dialog.sheet::backdrop { background: rgba(0, 0, 0, .62); }
+@keyframes sheet-in { from { transform: translateY(28px); opacity: 0; } }
+@media (min-width: 640px) {
+  dialog.sheet { inset: 0; margin: auto; max-height: 88vh; border-radius: 24px; border-bottom: 1px solid var(--line-strong); }
+}
+dialog.sheet.small { max-width: 440px; }
+.sheet-form { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px 6px; }
+.sheet-head h2 { font-size: 20px; letter-spacing: -.02em; }
+.sheet-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 18px 20px; }
+.sheet-foot {
+  display: flex; gap: 10px;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+}
+.amount-wrap { display: flex; align-items: baseline; justify-content: center; gap: 8px; padding: 10px 0 16px; }
+.amount-input {
+  width: 5ch; min-width: 0; max-width: calc(100% - 40px); padding: 4px 0;
+  background: none; border: 0; border-bottom: 2px solid var(--line-strong); border-radius: 0;
+  text-align: center; font-size: 46px; font-weight: 700; letter-spacing: -.03em;
+}
+.amount-input:focus { outline: none; border-bottom-color: var(--accent); }
+.amount-cur { font-size: 30px; font-weight: 600; color: var(--muted); }
+.seg {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; margin-bottom: 6px;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px;
+}
+.seg button { min-height: 40px; border: 0; border-radius: 10px; background: none; color: var(--text-2); font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--surface-3); color: var(--text); }
+.split-list { margin-top: 6px; }
+.split-row {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; min-height: 56px; padding: 8px 0;
+  background: none; border: 0; border-top: 1px solid var(--line);
+  text-align: left;
+}
+.split-row:first-child { border-top: 0; }
+.split-name { flex: 1; min-width: 0; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.split-val { min-width: 76px; text-align: right; font-size: 14px; color: var(--text-2); }
+.check {
+  display: inline-grid; place-items: center; flex: none;
+  width: 24px; height: 24px; border-radius: 7px;
+  border: 1.5px solid var(--line-strong);
+}
+.check-row[aria-pressed="true"] .check { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.check-row[aria-pressed="false"] .split-name { color: var(--muted); }
+.mini-wrap { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.mini-input {
+  width: 104px; min-height: 42px; padding: 8px 10px;
+  background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: 10px;
+  text-align: right;
+}
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-strong); border-radius: 999px; }
+.stepper button { width: 38px; height: 38px; border: 0; background: none; font-size: 20px; line-height: 1; }
+.stepper output { min-width: 26px; text-align: center; font-weight: 600; }
+.split-status { margin-top: 8px; font-size: 14px; color: var(--warn); }
+.split-status.ok { color: var(--text-2); }
+.form-error { margin-top: 16px; color: var(--danger); font-weight: 600; }
+.form-error:empty { display: none; }
+.meta-line { margin-top: 18px; font-size: 13px; color: var(--muted); }
+
+/* --- Toast --------------------------------------------------------------- */
+.toast {
+  position: fixed; z-index: 100; left: 50%;
+  bottom: calc(var(--tabbar) + 84px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 14px;
+  width: max-content; max-width: calc(100% - 32px);
+  padding: 12px 16px; border-radius: 14px;
+  background: #f4f4f6; color: #0b0b0e;
+  font-size: 15px; font-weight: 600;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .5);
+  transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s;
+}
+.toast.show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.toast button { flex: none; padding: 4px 2px; border: 0; background: none; color: #5b3df5; font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="9" width="3.4" height="11" rx="1.7"/><rect x="7.6" y="4" width="3.4" height="16" rx="1.7"/><rect x="13.2" y="11" width="3.4" height="9" rx="1.7"/><rect x="18.8" y="6.5" width="3.4" height="13.5" rx="1.7"/></svg>
+      </span>
+      <div>
+        <h1 id="title">ADE 2026</h1>
+        <p id="subtitle">Amsterdam</p>
+      </div>
+    </div>
+    <button class="pill status-local" id="syncPill" type="button"><span class="dot"></span><span id="syncLabel">Lokal</span></button>
+  </header>
+
+  <main>
+    <section class="view" id="view-overview" aria-label="Übersicht"></section>
+    <section class="view" id="view-expenses" aria-label="Ausgaben" hidden></section>
+    <section class="view" id="view-group" aria-label="Gruppe" hidden></section>
+  </main>
+</div>
+
+<button class="fab" id="fab" type="button">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  Ausgabe
+</button>
+
+<nav class="tabbar" aria-label="Bereiche">
+  <button type="button" data-view="overview" aria-current="page">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20v-8M12 20V4M19 20v-5"/></svg>
+    Übersicht
+  </button>
+  <button type="button" data-view="expenses" aria-current="false">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9.5 8h5M9.5 12h5M9.5 16h3"/></svg>
+    Ausgaben
+  </button>
+  <button type="button" data-view="group" aria-current="false">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.6 14.6c2.5.2 4.2 2 4.9 4.9"/></svg>
+    Gruppe
+  </button>
+</nav>
+
+<dialog class="sheet" id="expenseDialog"></dialog>
+<dialog class="sheet small" id="paymentDialog"></dialog>
+<dialog class="sheet small" id="keyDialog"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // --- Einstellungen ----------------------------------------------------------
+  const CONFIG = {
+    title: 'ADE 2026',
+    place: 'Amsterdam',
+    // Eure Namen – lassen sich auch später in der App unter „Gruppe“ ändern.
+    people: ['Person 1', 'Person 2', 'Person 3', 'Person 4'],
+    // Optional: feste Adresse für Teilen-Links, z. B. 'https://yland.media/ade/'
+    publicUrl: '',
+    pollMs: 4000,
+  };
+
+  const CATEGORIES = [
+    { id: 'tickets', label: 'Tickets', icon: '🎟️' },
+    { id: 'stay', label: 'Unterkunft', icon: '🏠' },
+    { id: 'travel', label: 'Anreise', icon: '🚆' },
+    { id: 'transit', label: 'Taxi & Öffis', icon: '🚕' },
+    { id: 'food', label: 'Essen', icon: '🍟' },
+    { id: 'drinks', label: 'Drinks', icon: '🍻' },
+    { id: 'groceries', label: 'Einkauf', icon: '🛒' },
+    { id: 'other', label: 'Sonstiges', icon: '✨' },
+  ];
+  const CAT = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
+  // Erste passende Regel gewinnt – deshalb steht „Taxi zum Club“ vor den Tickets.
+  const CATEGORY_HINTS = [
+    ['stay', /airbnb|hotel|hostel|unterkunft|übernacht|booking|apartment|wohnung|zimmer/i],
+    ['transit', /uber|bolt|taxi|tram|metro|u-?bahn|straßenbahn|gvb|ov-?chip|öffi|fähre|ferry|fahrrad|scooter/i],
+    ['travel', /\bzug|bahn|\bice\b|\bdb\b|flix|\bbus\b|flug|benzin|tank|sprit|diesel|maut|park(en|haus|platz|ing)|mietwagen|anreise|rückfahrt|hinfahrt|\bauto\b/i],
+    ['groceries', /albert ?heijn|\bah\b|jumbo|supermarkt|einkauf|lidl|aldi|rewe|edeka|kiosk|späti/i],
+    ['drinks', /bier|beer|drink|getränk|\bbar\b|\bshots?\b|cocktail|\bwein|wine|heineken|\bgin\b|vodka|wodka|\bmate\b|sekt|prosecco|\brunde/i],
+    ['food', /essen|döner|kebab|pizza|burger|pommes|fries|frites|frühstück|brunch|dinner|abendessen|mittag|lunch|sushi|febo|kibbeling|stroopwafel|bäcker|bakery|snack|restaurant|imbiss|pasta|falafel|bowl|mcdonald|kfc|frikandel|bitterballen|pancake|poffertjes|kaffee|coffee/i],
+    ['tickets', /ticket|karte|eintritt|einlass|festival|rave|club|line-?up|\bade\b|event|party|konzert/i],
+  ];
+  const guessCategory = title => (CATEGORY_HINTS.find(([, re]) => re.test(title)) || ['other'])[0];
+
+  const MAX_CENTS = 10000000; // 100.000 €
+  const ID_RE = /^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$/;
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const COLS = ['meta', 'members', 'items'];
+
+  // --- Kleine Helfer ----------------------------------------------------------
+  const $ = sel => document.querySelector(sel);
+  const dict = () => Object.create(null);
+  const sum = list => list.reduce((a, b) => a + b, 0);
+  const EUR = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
+  const fmt = cents => EUR.format(cents / 100);
+  const fmtSigned = cents => (cents > 0 ? '+' : cents < 0 ? '−' : '') + fmt(Math.abs(cents));
+  const toInput = cents => (cents / 100).toFixed(2).replace('.', ',');
+  const TIME_FMT = new Intl.DateTimeFormat('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const STAMP_FMT = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const DAY_FMT = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  function hash(str) {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+
+  function uid() {
+    const bytes = crypto.getRandomValues(new Uint8Array(10));
+    return 'x' + Array.from(bytes, b => (b % 36).toString(36)).join('');
+  }
+
+  function isoDate(d = new Date()) {
+    const z = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`;
+  }
+
+  function dayLabel(iso) {
+    const [y, m, d] = iso.split('-').map(Number);
+    const day = new Date(y, m - 1, d);
+    const now = new Date();
+    const diff = Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - day) / 864e5);
+    if (diff === 0) return 'Heute';
+    if (diff === 1) return 'Gestern';
+    return DAY_FMT.format(day);
+  }
+
+  // Betrag aus Texteingabe in Cent. Versteht „12,50“, „12.50“, „1.234,56“ und „12+8,50“.
+  function parseAmount(input) {
+    const s = String(input == null ? '' : input).replace(/[\s€]/g, '');
+    if (!s) return null;
+    let total = 0;
+    for (const part of s.split('+')) {
+      const cents = parsePart(part);
+      if (cents == null) return null;
+      total += cents;
+    }
+    return total;
+  }
+
+  function parsePart(s) {
+    if (!/^[\d.,]+$/.test(s)) return null;
+    const m = /[.,](\d{0,2})$/.exec(s);
+    const intPart = m ? s.slice(0, m.index) : s;
+    const thousands = m && s[m.index] === '.' ? ',' : '.';
+    if (!new RegExp('^\\d{1,3}(\\' + thousands + '\\d{3})*$|^\\d*$').test(intPart)) return null;
+    const cents = Number(intPart.replace(/[.,]/g, '') || '0') * 100 + Number(((m ? m[1] : '') + '00').slice(0, 2));
+    return Number.isSafeInteger(cents) ? cents : null;
+  }
+
+  // --- Speicher (localStorage, sonst nur im Arbeitsspeicher) ------------------
+  const memory = new Map();
+  const store = {
+    get(k) {
+      try {
+        const v = localStorage.getItem(k);
+        if (v != null) return v;
+      } catch { /* privater Modus o. Ä. */ }
+      return memory.has(k) ? memory.get(k) : null;
+    },
+    set(k, v) {
+      memory.set(k, v);
+      try { localStorage.setItem(k, v); return true; } catch { return false; }
+    },
+    del(k) {
+      memory.delete(k);
+      try { localStorage.removeItem(k); } catch { /* egal */ }
+    },
+  };
+  const SCOPE = 'ade:' + location.pathname.replace(/index\.html?$/, '');
+  const KEYS = {
+    state: SCOPE + ':state', me: SCOPE + ':me', key: SCOPE + ':key',
+    mode: SCOPE + ':mode', date: SCOPE + ':date', dirty: SCOPE + ':dirty', setup: SCOPE + ':setup',
+  };
+
+  // --- Datenmodell --------------------------------------------------------------
+  // Jeder Datensatz hat eine id und einen Zeitstempel u. Beim Zusammenführen gewinnt
+  // die neuere Version; Löschen setzt deleted: true, damit es sich mitverbreitet.
+  function emptyState() {
+    return { meta: dict(), members: dict(), items: dict() };
+  }
+
+  function baseState() {
+    const s = emptyState();
+    s.meta.group = { id: 'group', u: 0, name: CONFIG.title, place: CONFIG.place };
+    CONFIG.people.forEach((name, i) => {
+      const id = 'p' + (i + 1);
+      s.members[id] = { id, u: 0, name, paypal: '', order: i + 1 };
+    });
+    return s;
+  }
+
+  function isNewer(a, b) {
+    if (!b) return true;
+    if (a.u !== b.u) return a.u > b.u;
+    return JSON.stringify(a) > JSON.stringify(b);
+  }
+
+  function mergeRecord(target, col, rec) {
+    if (!isNewer(rec, target[col][rec.id])) return false;
+    target[col][rec.id] = rec;
+    return true;
+  }
+
+  function mergeState(target, source) {
+    const changed = { meta: 0, members: 0, items: 0, total: 0 };
+    for (const col of COLS) {
+      for (const rec of Object.values(source[col])) {
+        if (mergeRecord(target, col, rec)) { changed[col]++; changed.total++; }
+      }
+    }
+    return changed;
+  }
+
+  function exportPayload(s) {
+    const out = { v: 1 };
+    for (const col of COLS) out[col] = Object.values(s[col]).filter(r => r.u > 0);
+    return out;
+  }
+
+  const clean = (v, max) => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, max) : '');
+  const isId = v => typeof v === 'string' && ID_RE.test(v);
+  const isStamp = v => Number.isFinite(v) && v >= 0 && v < 1e14;
+  const isCents = v => Number.isSafeInteger(v) && v > 0 && v <= MAX_CENTS;
+
+  function cleanPaypal(v) {
+    const s = clean(v, 120).replace(/^https?:\/\//i, '').replace(/^(www\.)?paypal\.me\//i, '').replace(/^@/, '').split(/[/?#\s]/)[0];
+    return /^[A-Za-z0-9._-]{1,40}$/.test(s) ? s : '';
+  }
+
+  // Map von Personen-IDs auf Zahlen; Nullen fallen weg, Unsinn macht alles ungültig.
+  function cleanMap(obj, value) {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return null;
+    const out = dict();
+    let n = 0;
+    for (const [k, v] of Object.entries(obj)) {
+      const val = value(v);
+      if (!isId(k) || val == null || ++n > 50) return null;
+      if (val !== 0) out[k] = val;
+    }
+    return Object.keys(out).length ? out : null;
+  }
+
+  // Prüft einen Datensatz (aus Link, Datei, Server oder Formular) und gibt eine saubere Kopie zurück.
+  function sanitize(col, r) {
+    if (!r || typeof r !== 'object' || !isId(r.id) || !isStamp(r.u)) return null;
+    if (col === 'meta') {
+      if (r.id !== 'group') return null;
+      return { id: 'group', u: r.u, name: clean(r.name, 40) || CONFIG.title, place: clean(r.place, 40) };
+    }
+    if (col === 'members') {
+      const m = { id: r.id, u: r.u, name: clean(r.name, 24) || 'Ohne Namen', paypal: cleanPaypal(r.paypal), order: Number.isFinite(r.order) ? r.order : 99 };
+      if (r.deleted) m.deleted = true;
+      return m;
+    }
+    if (col !== 'items' || (r.kind !== 'expense' && r.kind !== 'payment')) return null;
+    if (r.deleted) return { id: r.id, u: r.u, kind: r.kind, deleted: true };
+    if (!isCents(r.amount) || typeof r.date !== 'string' || !DATE_RE.test(r.date)) return null;
+    const base = { id: r.id, u: r.u, kind: r.kind, amount: r.amount, date: r.date, created: isStamp(r.created) ? r.created : r.u };
+    if (isId(r.by)) base.by = r.by;
+    if (r.kind === 'payment') {
+      if (!isId(r.from) || !isId(r.to) || r.from === r.to) return null;
+      return { ...base, from: r.from, to: r.to };
+    }
+    const paidBy = cleanMap(r.paidBy, v => (Number.isSafeInteger(v) && v >= 0 ? v : null));
+    if (!paidBy || sum(Object.values(paidBy)) !== r.amount) return null;
+    const split = r.split || {};
+    let values = null;
+    if (split.mode === 'equal') values = cleanMap(split.values, v => (v ? 1 : 0));
+    else if (split.mode === 'shares') values = cleanMap(split.values, v => (Number.isFinite(v) && v >= 0 && v <= 1000 ? Math.round(v * 1000) / 1000 : null));
+    else if (split.mode === 'exact') {
+      values = cleanMap(split.values, v => (Number.isSafeInteger(v) && v >= 0 ? v : null));
+      if (values && sum(Object.values(values)) !== r.amount) values = null;
+    }
+    if (!values) return null;
+    return {
+      ...base,
+      title: clean(r.title, 60) || 'Ausgabe',
+      category: CAT[r.category] ? r.category : 'other',
+      paidBy,
+      split: { mode: split.mode, values },
+    };
+  }
+
+  function sanitizeState(obj) {
+    const out = emptyState();
+    if (!obj || typeof obj !== 'object') return out;
+    for (const col of COLS) {
+      const src = obj[col];
+      const list = Array.isArray(src) ? src : src && typeof src === 'object' ? Object.values(src) : [];
+      for (const raw of list.slice(0, 5000)) {
+        const rec = sanitize(col, raw);
+        if (rec) mergeRecord(out, col, rec);
+      }
+    }
+    return out;
+  }
+
+  // --- Rechnen ------------------------------------------------------------------
+  // Anteile pro Person in Cent. Restcents gehen reihum (Startpunkt hängt an der ID),
+  // damit nicht immer dieselbe Person den Extra-Cent zahlt.
+  function shareOf(item) {
+    const { amount, split } = item;
+    const ids = Object.keys(split.values).sort();
+    const out = dict();
+    if (split.mode === 'exact') {
+      for (const id of ids) out[id] = split.values[id];
+      return out;
+    }
+    const weights = ids.map(id => (split.mode === 'equal' ? 1 : split.values[id]));
+    const total = sum(weights);
+    const exact = weights.map(w => (amount * w) / total);
+    const base = exact.map(Math.floor);
+    const n = ids.length;
+    const start = hash(item.id) % n;
+    const order = ids.map((_, i) => i).sort((a, b) => {
+      const d = (exact[b] - base[b]) - (exact[a] - base[a]);
+      return Math.abs(d) > 1e-9 ? d : ((a - start + n) % n) - ((b - start + n) % n);
+    });
+    for (let rest = amount - sum(base), k = 0; rest > 0; rest--, k++) base[order[k % n]]++;
+    ids.forEach((id, i) => { out[id] = base[i]; });
+    return out;
+  }
+
+  function summarize(s) {
+    const bal = dict(), paid = dict(), share = dict(), byCat = dict();
+    const add = (map, key, v) => { map[key] = (map[key] || 0) + v; };
+    let total = 0, count = 0, payments = 0;
+    for (const it of Object.values(s.items)) {
+      if (it.deleted) continue;
+      if (it.kind === 'payment') {
+        add(bal, it.from, it.amount);
+        add(bal, it.to, -it.amount);
+        payments++;
+        continue;
+      }
+      total += it.amount;
+      count++;
+      add(byCat, it.category, it.amount);
+      for (const [id, c] of Object.entries(it.paidBy)) { add(bal, id, c); add(paid, id, c); }
+      for (const [id, c] of Object.entries(shareOf(it))) { add(bal, id, -c); add(share, id, c); }
+    }
+    return { bal, paid, share, byCat, total, count, payments };
+  }
+
+  // Wer zahlt wem: erst exakt passende Paare, dann größter Schuldner an größten Gläubiger.
+  // Ergibt höchstens (Personen − 1) Überweisungen.
+  function settle(bal) {
+    const rank = (a, b) => b.v - a.v || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+    const debtors = [], creditors = [];
+    for (const [id, v] of Object.entries(bal)) {
+      if (v < 0) debtors.push({ id, v: -v });
+      else if (v > 0) creditors.push({ id, v });
+    }
+    debtors.sort(rank);
+    creditors.sort(rank);
+    const out = [];
+    for (const d of debtors) {
+      const c = creditors.find(x => x.v === d.v);
+      if (c) { out.push({ from: d.id, to: c.id, amount: d.v }); c.v = 0; d.v = 0; }
+    }
+    for (;;) {
+      const d = debtors.filter(x => x.v > 0).sort(rank)[0];
+      const c = creditors.filter(x => x.v > 0).sort(rank)[0];
+      if (!d || !c) break;
+      const amount = Math.min(d.v, c.v);
+      out.push({ from: d.id, to: c.id, amount });
+      d.v -= amount;
+      c.v -= amount;
+    }
+    return out.sort((a, b) => b.amount - a.amount);
+  }
+
+  function fingerprint(s) {
+    const parts = [];
+    for (const col of COLS) for (const r of Object.values(s[col])) if (r.u > 0) parts.push(col + ':' + r.id + ':' + r.u);
+    return hash(parts.sort().join('|')).toString(36).toUpperCase().padStart(4, '0').slice(-4);
+  }
+
+  // --- Teilen-Link: kompletter Stand, komprimiert im #-Teil der URL ------------------
+  function toBase64Url(bytes) {
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function fromBase64Url(text) {
+    const b64 = text.replace(/-/g, '+').replace(/_/g, '/');
+    const bin = atob(b64 + '==='.slice((b64.length + 3) % 4));
+    return Uint8Array.from(bin, c => c.charCodeAt(0));
+  }
+
+  async function readCapped(stream, cap) {
+    const reader = stream.getReader();
+    const chunks = [];
+    let size = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.length;
+      if (size > cap) { reader.cancel(); throw new Error('zu groß'); }
+      chunks.push(value);
+    }
+    return new Blob(chunks).text();
+  }
+
+  async function encodeState(s) {
+    const bytes = new TextEncoder().encode(JSON.stringify(exportPayload(s)));
+    if (typeof CompressionStream === 'function') {
+      try {
+        const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate'));
+        return 'z' + toBase64Url(new Uint8Array(await new Response(stream).arrayBuffer()));
+      } catch { /* dann eben unkomprimiert */ }
+    }
+    return 'j' + toBase64Url(bytes);
+  }
+
+  async function decodeState(text) {
+    const bytes = fromBase64Url(text.slice(1));
+    let json;
+    if (text[0] === 'z') json = await readCapped(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate')), 5e6);
+    else if (text[0] === 'j') json = new TextDecoder().decode(bytes);
+    else throw new Error('Unbekanntes Format');
+    return sanitizeState(JSON.parse(json));
+  }
+
+  // --- Zustand ------------------------------------------------------------------
+  let state = loadState();
+  let view = 'overview';
+  let pendingRender = false;
+  let warnedStorage = false;
+  let accessKey = store.get(KEYS.key) || '';
+  const sync = { mode: 'local', rev: null, snap: null, busy: false, again: false, lastOk: 0, timer: 0, soon: 0 };
+
+  function loadState() {
+    const s = baseState();
+    try {
+      const raw = store.get(KEYS.state);
+      if (raw) mergeState(s, sanitizeState(JSON.parse(raw)));
+    } catch { /* kaputter Speicher: frisch anfangen */ }
+    return s;
+  }
+
+  function persist() {
+    const ok = store.set(KEYS.state, JSON.stringify(exportPayload(state)));
+    if (!ok && !warnedStorage) {
+      warnedStorage = true;
+      toast('Achtung: Dein Browser speichert hier nichts dauerhaft (privater Modus?).');
+    }
+  }
+
+  function dirtyIds() {
+    try { return new Set(JSON.parse(store.get(KEYS.dirty) || '[]')); } catch { return new Set(); }
+  }
+
+  // Speichert Änderungen lokal (neuerer Zeitstempel als die bearbeitete Version) und stößt den Abgleich an.
+  function commitAll(changes) {
+    const saved = [];
+    const dirty = dirtyIds();
+    for (const [col, raw] of changes) {
+      const cur = state[col][raw.id];
+      const rec = sanitize(col, { ...raw, u: Math.max(Date.now(), cur ? cur.u + 1 : 1) });
+      if (!rec) continue;
+      state[col][rec.id] = rec;
+      dirty.add(col + ':' + rec.id);
+      saved.push(rec);
+    }
+    if (saved.length < changes.length) toast('Das konnte nicht gespeichert werden.');
+    if (!saved.length) return [];
+    persist();
+    if (sync.mode === 'local') store.set(KEYS.dirty, JSON.stringify([...dirty]));
+    render();
+    scheduleSync();
+    return saved;
+  }
+
+  const commit = (col, raw) => commitAll([[col, raw]])[0] || null;
+
+  function members({ withDeleted = false } = {}) {
+    return Object.values(state.members)
+      .filter(m => withDeleted || !m.deleted)
+      .sort((a, b) => a.order - b.order || (a.id < b.id ? -1 : 1));
+  }
+  const nameOf = id => (state.members[id] ? state.members[id].name : 'Unbekannt');
+  const activeItems = () => Object.values(state.items).filter(it => !it.deleted);
+
+  function currentMe() {
+    const id = store.get(KEYS.me);
+    return id && state.members[id] && !state.members[id].deleted ? id : null;
+  }
+
+  function isReferenced(id) {
+    return activeItems().some(it => it.from === id || it.to === id || (it.paidBy && id in it.paidBy) || (it.split && id in it.split.values));
+  }
+
+  function needsSetup() {
+    return !store.get(KEYS.setup) && members().some(m => m.u === 0 && /^Person \d+$/.test(m.name)) && activeItems().length === 0;
+  }
+
+  // Alle, die im Kontostand auftauchen: aktuelle Mitglieder plus Entfernte mit offenem Betrag.
+  function balancePeople(s) {
+    const ids = members().map(m => m.id);
+    for (const [id, v] of Object.entries(s.bal)) if (v && !ids.includes(id)) ids.push(id);
+    return ids;
+  }
+
+  // --- Server-Abgleich (nur wenn server.js die Seite ausliefert) -------------------
+  function pageUrl() {
+    return CONFIG.publicUrl || location.href.split('#')[0];
+  }
+
+  function apiBase() {
+    let path = location.pathname;
+    if (!path.endsWith('/')) path = /\.[a-z0-9]+$/i.test(path.split('/').pop()) ? path.replace(/[^/]*$/, '') : path + '/';
+    return location.origin + path;
+  }
+
+  async function request(path, options = {}) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 10000);
+    try {
+      const headers = { 'X-Group-Key': encodeURIComponent(accessKey) };
+      if (options.body) headers['Content-Type'] = 'application/json';
+      const res = await fetch(apiBase() + path, { ...options, headers, cache: 'no-store', signal: ctrl.signal });
+      const json = /json/.test(res.headers.get('content-type') || '') ? await res.json().catch(() => null) : null;
+      return { status: res.status, json };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function applyServer(json) {
+    sync.rev = json.rev;
+    sync.snap = sanitizeState(json);
+    if (mergeState(state, sync.snap).total) {
+      persist();
+      render();
+    }
+  }
+
+  function pendingRecords() {
+    const out = [];
+    for (const col of COLS) {
+      for (const rec of Object.values(state[col])) {
+        if (!(rec.u > 0)) continue;
+        const known = sync.snap && sync.snap[col][rec.id];
+        if (!known || isNewer(rec, known)) out.push({ col, rec });
+      }
+    }
+    return out;
+  }
+
+  function lockOut() {
+    sync.mode = 'locked';
+    render();
+    openKeyDialog(!!accessKey);
+  }
+
+  async function syncNow() {
+    if (sync.mode === 'local' || sync.mode === 'locked') return;
+    if (sync.busy) { sync.again = true; return; }
+    sync.busy = true;
+    try {
+      const r = await request('api/state?since=' + (sync.rev == null ? '' : sync.rev));
+      if (r.status === 401) return lockOut();
+      if (r.status !== 200 || !r.json || r.json.ade !== 1) throw new Error('state');
+      if (!r.json.unchanged) applyServer(r.json);
+      const records = pendingRecords();
+      if (records.length) {
+        const p = await request('api/push', { method: 'POST', body: JSON.stringify({ records }) });
+        if (p.status === 401) return lockOut();
+        if (p.status !== 200 || !p.json || p.json.ade !== 1) throw new Error('push');
+        applyServer(p.json);
+      }
+      sync.lastOk = Date.now();
+      if (sync.mode !== 'server') { sync.mode = 'server'; render(); } else renderSyncPill();
+    } catch {
+      if (sync.mode !== 'offline') { sync.mode = 'offline'; render(); }
+    } finally {
+      sync.busy = false;
+      if (sync.again) { sync.again = false; syncNow(); }
+    }
+  }
+
+  function scheduleSync() {
+    if (sync.mode !== 'server' && sync.mode !== 'offline') return;
+    clearTimeout(sync.soon);
+    sync.soon = setTimeout(syncNow, 150);
+  }
+
+  function startPolling() {
+    if (sync.timer) return;
+    sync.timer = setInterval(() => { if (document.visibilityState === 'visible') syncNow(); }, CONFIG.pollMs);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncNow(); });
+    window.addEventListener('online', () => syncNow());
+  }
+
+  async function detectServer() {
+    if (!/^https?:$/.test(location.protocol)) return;
+    let r = null;
+    try { r = await request('api/state'); } catch { r = null; }
+    if (r && r.json && r.json.ade === 1) {
+      store.set(KEYS.mode, 'server');
+      startPolling();
+      if (r.status === 401) return lockOut();
+      if (r.status === 200) {
+        sync.mode = 'server';
+        sync.lastOk = Date.now();
+        applyServer(r.json);
+        render();
+        syncNow();
+      }
+    } else if (!r && store.get(KEYS.mode) === 'server') {
+      sync.mode = 'offline';
+      startPolling();
+      render();
+    } else if (r) {
+      store.del(KEYS.mode);
+    }
+  }
+
+  // --- DOM-Helfer -----------------------------------------------------------------
+  function append(el, children) {
+    for (const child of children.flat(Infinity)) {
+      if (child == null || child === false || child === '') continue;
+      el.append(child instanceof Node ? child : String(child));
+    }
+    return el;
+  }
+
+  function fill(el, ...children) {
+    el.replaceChildren();
+    return append(el, children);
+  }
+
+  // Baut DOM-Knoten; Texte landen immer als Text im DOM, nie als HTML.
+  function h(tag, props, ...children) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(props || {})) {
+      if (v == null || v === false) continue;
+      if (k === 'class') el.className = v;
+      else if (k === 'value') el.value = v;
+      else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? '' : String(v));
+    }
+    return append(el, children);
+  }
+
+  const ICONS = {
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    arrow: '<path d="M4 12h15M13 6l6 6-6 6"/>',
+    share: '<path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>',
+  };
+
+  function icon(name, size = 20) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    for (const [k, v] of Object.entries({ viewBox: '0 0 24 24', width: size, height: size, fill: 'none', stroke: 'currentColor', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' })) svg.setAttribute(k, v);
+    svg.innerHTML = ICONS[name];
+    return svg;
+  }
+
+  function avatar(id, size) {
+    const name = nameOf(id).trim();
+    const el = h('span', { class: 'avatar' + (id === currentMe() ? ' is-me' : ''), 'aria-hidden': 'true' }, (Array.from(name)[0] || '?').toUpperCase());
+    if (size) el.style.setProperty('--size', size + 'px');
+    return el;
+  }
+
+  const meTag = id => (id === currentMe() ? h('span', { class: 'tag' }, 'du') : null);
+
+  function person(id) {
+    return h('span', { class: 'person' }, avatar(id), h('span', { class: 'person-name' }, nameOf(id)), meTag(id));
+  }
+
+  let toastTimer = 0;
+  function toast(message, action) {
+    const el = $('#toast');
+    fill(el, h('span', null, message), action ? h('button', { type: 'button', onclick: () => { hideToast(); action.run(); } }, action.label) : null);
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(hideToast, action ? 6000 : 3000);
+  }
+
+  function hideToast() {
+    $('#toast').classList.remove('show');
+  }
+
+  // --- Ansichten ----------------------------------------------------------------
+  function render() {
+    const meta = state.meta.group;
+    $('#title').textContent = meta.name;
+    $('#subtitle').textContent = [meta.place, members().length + ' Leute'].filter(Boolean).join(' · ');
+    document.title = meta.name + ' · Abrechnung';
+    renderSyncPill();
+    for (const btn of document.querySelectorAll('[data-view]')) btn.setAttribute('aria-current', btn.dataset.view === view ? 'page' : 'false');
+    for (const section of document.querySelectorAll('.view')) {
+      section.hidden = section.id !== 'view-' + view;
+      if (section.hidden) section.replaceChildren();
+    }
+    $('#fab').hidden = view === 'group';
+    const el = $('#view-' + view);
+    // Nicht neu zeichnen, während jemand in dieser Ansicht tippt – passiert beim Verlassen des Felds.
+    const active = document.activeElement;
+    if (active && el.contains(active) && active.matches('input:not([type="file"]), textarea, select')) {
+      pendingRender = true;
+      return;
+    }
+    pendingRender = false;
+    if (view === 'overview') renderOverview(el);
+    else if (view === 'expenses') renderExpenses(el);
+    else renderGroup(el);
+  }
+
+  function renderSyncPill() {
+    const pill = $('#syncPill');
+    pill.className = 'pill status-' + sync.mode;
+    $('#syncLabel').textContent = { local: 'Lokal', server: 'Live', offline: 'Offline', locked: 'Gesperrt' }[sync.mode];
+    pill.title = {
+      local: 'Gespeichert auf diesem Gerät – teilen per Link',
+      server: 'Live-Abgleich aktiv' + (sync.lastOk ? ' · zuletzt ' + TIME_FMT.format(sync.lastOk) : ''),
+      offline: 'Keine Verbindung – Änderungen werden später übertragen',
+      locked: 'Zugangscode fehlt',
+    }[sync.mode];
+  }
+
+  function localBanner() {
+    if (sync.mode !== 'local') return null;
+    const n = dirtyIds().size;
+    if (!n) return null;
+    return h('div', { class: 'banner' },
+      h('p', null, h('strong', null, n === 1 ? '1 Änderung' : n + ' Änderungen'), ' bisher nur auf diesem Gerät. Schick deinen Stand in eure Gruppe.'),
+      h('button', { type: 'button', class: 'btn btn-primary btn-small', onclick: shareState }, icon('share', 18), 'Teilen'));
+  }
+
+  function renderOverview(el) {
+    const s = summarize(state);
+    const me = currentMe();
+    const transfers = settle(s.bal);
+    const setup = needsSetup();
+    fill(el,
+      localBanner(),
+      setup ? setupCard() : !me ? whoAmICard() : null,
+      heroCard(s, me),
+      !s.count && !s.payments && !setup ? emptyCard() : null,
+      s.count || s.payments ? transfersCard(transfers, me) : null,
+      s.count || s.payments ? balanceCard(s) : null,
+      s.count ? categoryCard(s) : null,
+      s.count ? tableCard(s) : null);
+  }
+
+  function setupCard() {
+    const people = members();
+    const inputs = people.map((m, i) => h('input', {
+      class: 'field', maxlength: 24, autocomplete: 'off', 'data-id': m.id,
+      'aria-label': 'Name ' + (i + 1), placeholder: 'Name ' + (i + 1),
+      value: m.u === 0 && /^Person \d+$/.test(m.name) ? '' : m.name,
+    }));
+    const submit = e => {
+      e.preventDefault();
+      const changes = [];
+      for (const input of inputs) {
+        const name = input.value.trim();
+        const m = state.members[input.dataset.id];
+        if (m && name && name !== m.name) changes.push(['members', { ...m, name }]);
+      }
+      if (document.activeElement) document.activeElement.blur();
+      // Leere Felder bleiben Platzhalter (nicht speichern, sonst könnten sie per Link echte Namen überschreiben)
+      store.set(KEYS.setup, '1');
+      if (changes.length) commitAll(changes);
+      else render();
+    };
+    return h('form', { class: 'card', onsubmit: submit },
+      h('h2', { class: 'card-title' }, 'Wer ist dabei?'),
+      h('p', { class: 'muted' }, 'Tragt eure Namen ein – geht auch später noch unter „Gruppe“.'),
+      h('div', { class: 'setup-grid' }, inputs),
+      h('button', { type: 'submit', class: 'btn btn-primary btn-block' }, 'Los geht’s'),
+      sync.mode === 'local' ? h('p', { class: 'hint' }, 'Hat dir schon jemand einen Link zur Abrechnung geschickt? Dann öffne einfach den – da sind Namen und Einträge schon drin.') : null);
+  }
+
+  function whoAmICard() {
+    return h('section', { class: 'card' },
+      h('h2', { class: 'card-title' }, 'Wer bist du?'),
+      h('p', { class: 'muted' }, 'Dann siehst du sofort, was du bekommst oder zahlen musst. Wird nur auf diesem Gerät gemerkt.'),
+      h('div', { class: 'chips', style: 'margin-top:14px' }, members().map(m =>
+        h('button', { type: 'button', class: 'chip', onclick: () => { store.set(KEYS.me, m.id); render(); } }, avatar(m.id, 28), m.name))));
+  }
+
+  function heroCard(s, me) {
+    const count = members().length;
+    let meLine = null;
+    if (me && (s.count || s.payments)) {
+      const b = s.bal[me] || 0;
+      meLine = h('p', { class: 'me-line' },
+        h('span', { class: 'dot ' + (b > 0 ? 'pos' : b < 0 ? 'neg' : '') }),
+        h('span', null, b > 0 ? ['Du bekommst noch ', h('strong', null, fmt(b))] : b < 0 ? ['Du musst noch ', h('strong', null, fmt(-b)), ' zahlen'] : 'Du bist quitt'));
+    }
+    return h('section', { class: 'card hero' },
+      h('h2', { class: 'card-title' }, 'Gesamtausgaben'),
+      h('p', { class: 'hero-total' }, fmt(s.total)),
+      h('p', { class: 'hero-meta' }, `${s.count} ${s.count === 1 ? 'Ausgabe' : 'Ausgaben'}` + (count ? ` · Ø ${fmt(Math.round(s.total / count))} pro Kopf` : '')),
+      meLine);
+  }
+
+  function emptyCard() {
+    return h('section', { class: 'card empty' },
+      h('p', { class: 'empty-emoji', 'aria-hidden': 'true' }, '🧾'),
+      h('h2', null, 'Noch keine Ausgaben'),
+      h('p', { class: 'muted' }, 'Tippe auf „Ausgabe“ und trag ein, was du am Wochenende bezahlt hast – Tickets, Airbnb, Uber, Drinks …'),
+      h('button', { type: 'button', class: 'btn btn-primary', onclick: () => openExpense() }, icon('plus', 18), 'Erste Ausgabe eintragen'));
+  }
+
+  function paypalLink(handle, cents) {
+    return `https://paypal.me/${encodeURIComponent(handle)}/${(cents / 100).toFixed(2)}EUR`;
+  }
+
+  function transfersCard(transfers, me) {
+    const rows = transfers.map(t => {
+      const paypal = state.members[t.to] && state.members[t.to].paypal;
+      return h('div', { class: 'transfer' + (t.from === me || t.to === me ? ' is-mine' : '') },
+        h('div', { class: 'transfer-who' },
+          person(t.from),
+          h('span', { class: 'arrow' }, icon('arrow', 18), h('span', { class: 'sr-only' }, 'zahlt an')),
+          person(t.to)),
+        h('div', { class: 'transfer-foot' },
+          h('p', { class: 'transfer-amount' }, fmt(t.amount)),
+          h('div', { class: 'transfer-actions' },
+            paypal ? h('a', { class: 'btn btn-small', href: paypalLink(paypal, t.amount), target: '_blank', rel: 'noopener noreferrer' }, 'PayPal') : null,
+            h('button', { type: 'button', class: 'btn btn-small', title: 'Zahlung eintragen', onclick: () => openPayment({ from: t.from, to: t.to, amount: t.amount }) }, icon('check', 16), 'Bezahlt'))));
+    });
+    return h('section', { class: 'card' },
+      h('h2', { class: 'card-title' }, 'Wer zahlt wem?'),
+      transfers.length
+        ? [h('p', { class: 'muted small', style: 'margin:-4px 0 4px' }, transfers.length === 1 ? 'Eine Überweisung, dann ist alles erledigt.' : `${transfers.length} Überweisungen, dann ist alles erledigt.`), rows]
+        : h('p', { class: 'all-square' }, '🎉 Alle sind quitt – niemand schuldet jemandem etwas.'),
+      h('button', { type: 'button', class: 'btn btn-block share-btn', onclick: shareSummary }, icon('share', 18), 'Abrechnung teilen'));
+  }
+
+  function balanceCard(s) {
+    const ids = balancePeople(s);
+    const max = Math.max(1, ...ids.map(id => Math.abs(s.bal[id] || 0)));
+    return h('section', { class: 'card' },
+      h('h2', { class: 'card-title' }, 'Kontostand'),
+      h('div', { class: 'legend' },
+        h('span', null, h('span', { class: 'dot pos' }), 'bekommt Geld'),
+        h('span', null, h('span', { class: 'dot neg' }), 'muss zahlen')),
+      ids.map(id => {
+        const b = s.bal[id] || 0;
+        return h('div', { class: 'bal-row', title: `${nameOf(id)}: ${fmtSigned(b)}` },
+          h('div', { class: 'bal-head' },
+            h('span', { class: 'bal-name' }, nameOf(id), meTag(id)),
+            h('span', { class: 'bal-text num' }, b > 0 ? 'bekommt ' + fmt(b) : b < 0 ? 'zahlt ' + fmt(-b) : 'quitt')),
+          h('div', { class: 'bal-track', 'aria-hidden': 'true' },
+            b ? h('div', { class: 'bal-bar ' + (b > 0 ? 'pos' : 'neg'), style: `width:calc(${(Math.abs(b) / max) * 50}% - 1px)` }) : null));
+      }));
+  }
+
+  function categoryCard(s) {
+    const cats = CATEGORIES.filter(c => s.byCat[c.id]).sort((a, b) => s.byCat[b.id] - s.byCat[a.id]);
+    const max = s.byCat[cats[0].id];
+    return h('section', { class: 'card' },
+      h('h2', { class: 'card-title' }, 'Wofür ging’s drauf?'),
+      cats.map(c => {
+        const v = s.byCat[c.id];
+        return h('div', { class: 'cat-row', title: `${c.label}: ${fmt(v)}` },
+          h('span', { class: 'cat-label' }, h('span', { 'aria-hidden': 'true' }, c.icon + ' '), c.label),
+          h('span', { class: 'cat-value num' }, fmt(v), h('span', { class: 'muted' }, ` · ${Math.round((v / s.total) * 100)} %`)),
+          h('div', { class: 'cat-track', 'aria-hidden': 'true' }, h('div', { class: 'cat-bar', style: `width:${(v / max) * 100}%` })));
+      }));
+  }
+
+  function tableCard(s) {
+    return h('section', { class: 'card' },
+      h('h2', { class: 'card-title' }, 'Bezahlt & Anteil'),
+      h('div', { class: 'table-wrap' }, h('table', { class: 'table num' },
+        h('thead', null, h('tr', null,
+          h('th', { scope: 'col' }, h('span', { class: 'sr-only' }, 'Person')),
+          h('th', { scope: 'col' }, 'Bezahlt'),
+          h('th', { scope: 'col' }, 'Anteil'),
+          h('th', { scope: 'col' }, 'Saldo'))),
+        h('tbody', null, balancePeople(s).map(id => h('tr', null,
+          h('th', { scope: 'row' }, nameOf(id)),
+          h('td', null, fmt(s.paid[id] || 0)),
+          h('td', null, fmt(s.share[id] || 0)),
+          h('td', null, fmtSigned(s.bal[id] || 0))))))),
+      h('p', { class: 'hint' }, 'Saldo = bezahlt − eigener Anteil, inklusive eingetragener Rückzahlungen.'));
+  }
+
+  function renderExpenses(el) {
+    const items = activeItems().sort((a, b) => (a.date !== b.date ? (a.date < b.date ? 1 : -1) : b.created - a.created));
+    if (!items.length) {
+      fill(el, localBanner(), emptyCard());
+      return;
+    }
+    const me = currentMe();
+    const days = [];
+    for (const it of items) {
+      const last = days[days.length - 1];
+      if (last && last.date === it.date) last.items.push(it);
+      else days.push({ date: it.date, items: [it] });
+    }
+    const expenses = items.filter(it => it.kind === 'expense');
+    fill(el,
+      localBanner(),
+      h('div', { class: 'list-head' },
+        h('h2', null, 'Ausgaben'),
+        h('span', { class: 'muted num' }, `${expenses.length} · ${fmt(sum(expenses.map(it => it.amount)))}`)),
+      days.map(day => [
+        h('h3', { class: 'day' }, dayLabel(day.date), h('span', { class: 'muted num' }, fmt(sum(day.items.filter(it => it.kind === 'expense').map(it => it.amount))))),
+        h('div', { class: 'list' }, day.items.map(it => (it.kind === 'expense' ? expenseRow(it, me) : paymentRow(it, me)))),
+      ]));
+  }
+
+  function expenseRow(it, me) {
+    const cat = CAT[it.category] || CAT.other;
+    const payers = Object.keys(it.paidBy);
+    const payerText = payers.length === 1 ? `${nameOf(payers[0])} hat bezahlt`
+      : payers.length === 2 ? `${nameOf(payers[0])} & ${nameOf(payers[1])} haben bezahlt` : `${payers.length} Leute haben bezahlt`;
+    const n = Object.keys(it.split.values).length;
+    const splitText = it.split.mode === 'exact' ? 'feste Beträge' : it.split.mode === 'shares' ? 'nach Anteilen'
+      : n === members().length ? 'für alle' : n === 1 ? 'für ' + nameOf(Object.keys(it.split.values)[0]) : `für ${n} Leute`;
+    let mine = null;
+    if (me) {
+      const net = (it.paidBy[me] || 0) - (shareOf(it)[me] || 0);
+      const involved = me in it.paidBy || me in it.split.values;
+      mine = !involved ? h('span', { class: 'row-me muted' }, 'nicht dabei')
+        : h('span', { class: 'row-me' }, h('span', { class: 'dot ' + (net > 0 ? 'pos' : net < 0 ? 'neg' : '') }),
+          net > 0 ? 'du bekommst ' + fmt(net) : net < 0 ? 'du schuldest ' + fmt(-net) : 'ausgeglichen');
+    }
+    return h('button', { type: 'button', class: 'row', onclick: () => openExpense(it.id) },
+      h('span', { class: 'row-icon', 'aria-hidden': 'true' }, cat.icon),
+      h('span', { class: 'row-main' }, h('span', { class: 'row-title' }, it.title), h('span', { class: 'row-sub' }, `${payerText} · ${splitText}`), mine),
+      h('span', { class: 'row-amount num' }, fmt(it.amount)));
+  }
+
+  function paymentRow(it, me) {
+    const mine = me === it.from ? 'du hast gezahlt' : me === it.to ? 'du hast bekommen' : null;
+    return h('button', { type: 'button', class: 'row', onclick: () => openPayment({ id: it.id }) },
+      h('span', { class: 'row-icon', 'aria-hidden': 'true' }, '💸'),
+      h('span', { class: 'row-main' },
+        h('span', { class: 'row-title' }, `${nameOf(it.from)} → ${nameOf(it.to)}`),
+        h('span', { class: 'row-sub' }, 'Rückzahlung'),
+        mine ? h('span', { class: 'row-me' }, mine) : null),
+      h('span', { class: 'row-amount num' }, fmt(it.amount)));
+  }
+
+  function renderGroup(el) {
+    const meta = state.meta.group;
+    const people = members();
+    const me = currentMe();
+    fill(el,
+      h('section', { class: 'card' },
+        h('h2', { class: 'card-title' }, 'Gruppe'),
+        h('label', { class: 'label', for: 'groupName' }, 'Name'),
+        h('input', { id: 'groupName', class: 'field', maxlength: 40, value: meta.name, onchange: e => { if (e.target.value.trim()) commit('meta', { ...state.meta.group, name: e.target.value }); else e.target.value = state.meta.group.name; } }),
+        h('label', { class: 'label', for: 'groupPlace' }, 'Ort'),
+        h('input', { id: 'groupPlace', class: 'field', maxlength: 40, value: meta.place, onchange: e => commit('meta', { ...state.meta.group, place: e.target.value }) })),
+      h('section', { class: 'card' },
+        h('h2', { class: 'card-title' }, 'Leute'),
+        people.map(m => memberEditor(m, people.length)),
+        h('button', { type: 'button', class: 'btn btn-ghost', style: 'margin-top:12px', onclick: addMember }, icon('plus', 18), 'Person hinzufügen'),
+        h('p', { class: 'hint' }, 'Mit PayPal.me-Namen erscheint bei „Wer zahlt wem?“ direkt ein Bezahl-Button.')),
+      h('section', { class: 'card' },
+        h('h2', { class: 'card-title' }, 'Du auf diesem Gerät'),
+        h('div', { class: 'chips' }, people.map(m =>
+          h('button', { type: 'button', class: 'chip', 'aria-pressed': String(m.id === me), onclick: () => { store.set(KEYS.me, m.id); render(); } }, avatar(m.id, 28), m.name)))),
+      syncCard(),
+      h('section', { class: 'card' },
+        h('h2', { class: 'card-title' }, 'Backup'),
+        h('p', { class: 'muted' }, 'Alle Einträge als Datei sichern oder eine Sicherung einspielen (wird zusammengeführt, nichts wird doppelt).'),
+        h('div', { class: 'btn-row' },
+          h('button', { type: 'button', class: 'btn', onclick: exportBackup }, 'Als Datei sichern'),
+          h('label', { class: 'btn' }, 'Datei laden', h('input', { type: 'file', accept: '.json,application/json', class: 'sr-only', onchange: importBackup })))),
+      sync.mode === 'local' ? h('section', { class: 'card' },
+        h('h2', { class: 'card-title' }, 'Zurücksetzen'),
+        h('button', { type: 'button', class: 'btn btn-danger btn-block', onclick: resetLocal }, 'Alle Daten auf diesem Gerät löschen')) : null,
+      h('p', { class: 'footnote' }, 'Die Seite ist für Suchmaschinen gesperrt. Daten liegen nur in euren Browsern' + (sync.mode === 'local' ? ' und in den geteilten Links.' : ' und auf eurem Server.')));
+  }
+
+  function memberEditor(m, count) {
+    const removable = count > 2 && !isReferenced(m.id);
+    const update = patch => commit('members', { ...state.members[m.id], ...patch });
+    return h('div', { class: 'member' },
+      avatar(m.id, 40),
+      h('div', { class: 'member-fields' },
+        h('input', {
+          class: 'field', maxlength: 24, value: m.name, 'aria-label': 'Name', 'data-member': m.id,
+          onchange: e => { const name = e.target.value.trim(); if (name) update({ name }); else e.target.value = m.name; },
+        }),
+        h('input', {
+          class: 'field field-small', value: m.paypal, placeholder: 'PayPal.me-Name (optional)', 'aria-label': 'PayPal.me-Name von ' + m.name,
+          autocapitalize: 'off', autocomplete: 'off', spellcheck: 'false',
+          onchange: e => update({ paypal: e.target.value }),
+        })),
+      removable ? h('button', {
+        type: 'button', class: 'icon-btn', 'aria-label': m.name + ' entfernen', title: 'Entfernen',
+        onclick: () => { if (confirm(`${m.name} aus der Gruppe entfernen?`)) update({ deleted: true }); },
+      }, icon('close', 18)) : null);
+  }
+
+  function addMember() {
+    const order = Math.max(0, ...members({ withDeleted: true }).map(m => m.order)) + 1;
+    const rec = commit('members', { id: uid(), name: 'Person ' + (members().length + 1), paypal: '', order });
+    const input = rec && document.querySelector(`[data-member="${rec.id}"]`);
+    if (input) { input.focus(); input.select(); }
+  }
+
+  function syncCard() {
+    const n = activeItems().length;
+    const stand = h('p', { class: 'stand num' }, `Datenstand ${fingerprint(state)} · ${n} ${n === 1 ? 'Eintrag' : 'Einträge'}`);
+    const card = (status, text, ...rest) => h('section', { class: 'card', id: 'syncCard' },
+      h('h2', { class: 'card-title' }, 'Abgleich'),
+      h('p', { class: 'sync-state status-' + sync.mode }, h('span', { class: 'dot' }), status),
+      h('p', { class: 'muted' }, text),
+      stand, rest);
+    if (sync.mode === 'server') {
+      return card('Live-Abgleich aktiv',
+        `Alle Änderungen landen sofort bei allen. Zuletzt abgeglichen um ${TIME_FMT.format(sync.lastOk || Date.now())}.`,
+        h('button', { type: 'button', class: 'btn btn-primary btn-block', onclick: shareInvite }, icon('share', 18), 'Einladungslink teilen'));
+    }
+    if (sync.mode === 'offline') {
+      return card('Offline',
+        'Gerade keine Verbindung zum Server. Deine Änderungen bleiben gespeichert und werden übertragen, sobald es wieder klappt.',
+        h('button', { type: 'button', class: 'btn btn-block', onclick: syncNow }, 'Erneut versuchen'));
+    }
+    if (sync.mode === 'locked') {
+      return card('Zugangscode fehlt',
+        'Der Server braucht einen Zugangscode. Er steckt im Einladungslink.',
+        h('button', { type: 'button', class: 'btn btn-primary btn-block', onclick: () => openKeyDialog(false) }, 'Code eingeben'));
+    }
+    return card('Lokal auf diesem Gerät',
+      'Eure Einträge liegen im Browser dieses Geräts. Damit alle denselben Stand haben, schickt ihr euch den Stand als Link, z. B. in eure WhatsApp-Gruppe. Wer ihn öffnet, bekommt alle Einträge dazu – nichts wird doppelt gezählt oder überschrieben. Gleicher Datenstand-Code = gleicher Stand.',
+      h('button', { type: 'button', class: 'btn btn-primary btn-block', onclick: shareState }, icon('share', 18), 'Stand per Link teilen'));
+  }
+
+  // --- Ausgabe erfassen / bearbeiten ------------------------------------------------
+  function fitAmount(input) {
+    input.style.width = Math.max(4, input.value.length) + 1 + 'ch';
+  }
+
+  function moneyInput(value, onInput, label) {
+    return h('span', { class: 'mini-wrap' },
+      h('input', { class: 'mini-input num', inputmode: 'decimal', autocomplete: 'off', placeholder: '0,00', value, 'aria-label': label, oninput: e => onInput(e.target.value) }),
+      '€');
+  }
+
+  function openExpense(id) {
+    const dlg = $('#expenseDialog');
+    const ex = id ? state.items[id] : null;
+    if (id && (!ex || ex.deleted || ex.kind !== 'expense')) return;
+    const me = currentMe();
+    const people = members();
+    if (ex) {
+      for (const pid of [...Object.keys(ex.paidBy), ...Object.keys(ex.split.values)]) {
+        if (!people.some(p => p.id === pid)) people.push({ id: pid, name: nameOf(pid) });
+      }
+    }
+    const ids = people.map(p => p.id);
+    const draftId = ex ? ex.id : uid();
+    const f = {
+      amount: ex ? toInput(ex.amount) : '',
+      title: ex ? ex.title : '',
+      category: ex ? ex.category : 'other',
+      catTouched: !!ex,
+      date: ex ? ex.date : store.get(KEYS.date) || isoDate(),
+      multiPay: ex ? Object.keys(ex.paidBy).length > 1 : false,
+      payer: ex ? Object.keys(ex.paidBy)[0] : me || ids[0],
+      payAmounts: Object.fromEntries(ids.map(pid => [pid, ex && ex.paidBy[pid] ? toInput(ex.paidBy[pid]) : ''])),
+      mode: ex ? ex.split.mode : 'equal',
+      equal: new Set(ex ? Object.keys(ex.split.values) : ids),
+      exact: Object.fromEntries(ids.map(pid => [pid, ex && ex.split.mode === 'exact' && ex.split.values[pid] ? toInput(ex.split.values[pid]) : ''])),
+      shares: Object.fromEntries(ids.map(pid => [pid, ex && ex.split.mode === 'shares' ? ex.split.values[pid] || 0 : ex && !(pid in ex.split.values) ? 0 : 1])),
+    };
+
+    const amountInput = h('input', {
+      class: 'amount-input num', inputmode: 'decimal', autocomplete: 'off', placeholder: '0,00', value: f.amount, 'aria-label': 'Betrag in Euro',
+      oninput: e => { f.amount = e.target.value; fitAmount(e.target); refresh(); },
+    });
+    const titleInput = h('input', {
+      class: 'field', maxlength: 60, autocomplete: 'off', placeholder: 'Wofür? z. B. Pizza, Uber, Tickets', value: f.title, 'aria-label': 'Beschreibung',
+      oninput: e => { f.title = e.target.value; if (!f.catTouched) { f.category = guessCategory(f.title); paintCategories(); } },
+    });
+    const catRow = h('div', { class: 'chips scroll', role: 'group', 'aria-label': 'Kategorie' });
+    const dateInput = h('input', { id: 'expenseDate', type: 'date', class: 'field', value: f.date, onchange: e => { f.date = e.target.value; } });
+    const paySection = h('div', { class: 'pay-section' });
+    const splitSection = h('div', { class: 'split-section' });
+    const errorEl = h('p', { class: 'form-error', role: 'alert' });
+    let payStatus = null, splitStatus = null, previews = dict();
+
+    function paintCategories() {
+      fill(catRow, CATEGORIES.map(c => h('button', {
+        type: 'button', class: 'chip', 'aria-pressed': String(f.category === c.id),
+        onclick: () => { f.category = c.id; f.catTouched = true; paintCategories(); },
+      }, h('span', { 'aria-hidden': 'true' }, c.icon), c.label)));
+      // Gewählte Kategorie sichtbar machen, auch wenn sie automatisch erkannt wurde
+      const chip = catRow.querySelector('[aria-pressed="true"]');
+      if (chip && dlg.open) {
+        const row = catRow.getBoundingClientRect(), box = chip.getBoundingClientRect();
+        if (box.left < row.left || box.right > row.right) catRow.scrollLeft += box.left - row.left - (row.width - box.width) / 2;
+      }
+    }
+
+    function paintPay() {
+      payStatus = h('p', { class: 'split-status' });
+      fill(paySection,
+        h('div', { class: 'chips' },
+          people.map(p => h('button', {
+            type: 'button', class: 'chip', 'aria-pressed': String(!f.multiPay && f.payer === p.id),
+            onclick: () => { f.multiPay = false; f.payer = p.id; paintPay(); refresh(); },
+          }, avatar(p.id, 28), p.name)),
+          h('button', { type: 'button', class: 'chip', 'aria-pressed': String(f.multiPay), onclick: () => { f.multiPay = true; paintPay(); refresh(); } }, 'Mehrere')),
+        f.multiPay ? [
+          h('div', { class: 'split-list' }, people.map(p => h('div', { class: 'split-row' },
+            avatar(p.id, 28), h('span', { class: 'split-name' }, p.name),
+            moneyInput(f.payAmounts[p.id], v => { f.payAmounts[p.id] = v; refresh(); }, 'Bezahlt von ' + p.name)))),
+          payStatus,
+        ] : null);
+    }
+
+    function paintSplit() {
+      splitStatus = h('p', { class: 'split-status' });
+      previews = dict();
+      const preview = pid => (previews[pid] = h('span', { class: 'split-val num' }));
+      let rows;
+      if (f.mode === 'equal') {
+        rows = people.map(p => {
+          const on = f.equal.has(p.id);
+          return h('button', {
+            type: 'button', class: 'split-row check-row', 'aria-pressed': String(on),
+            onclick: () => { if (on) f.equal.delete(p.id); else f.equal.add(p.id); paintSplit(); refresh(); },
+          }, h('span', { class: 'check', 'aria-hidden': 'true' }, on ? icon('check', 16) : null), avatar(p.id, 28), h('span', { class: 'split-name' }, p.name), preview(p.id));
+        });
+      } else if (f.mode === 'exact') {
+        rows = people.map(p => h('div', { class: 'split-row' },
+          avatar(p.id, 28), h('span', { class: 'split-name' }, p.name),
+          moneyInput(f.exact[p.id], v => { f.exact[p.id] = v; refresh(); }, 'Anteil von ' + p.name)));
+      } else {
+        rows = people.map(p => {
+          const out = h('output', null, String(f.shares[p.id]));
+          const step = delta => { f.shares[p.id] = Math.max(0, Math.round(f.shares[p.id] + delta)); out.textContent = String(f.shares[p.id]); refresh(); };
+          return h('div', { class: 'split-row' },
+            avatar(p.id, 28), h('span', { class: 'split-name' }, p.name), preview(p.id),
+            h('span', { class: 'stepper' },
+              h('button', { type: 'button', 'aria-label': 'Weniger Anteile für ' + p.name, onclick: () => step(-1) }, '−'),
+              out,
+              h('button', { type: 'button', 'aria-label': 'Mehr Anteile für ' + p.name, onclick: () => step(1) }, '+')));
+        });
+      }
+      fill(splitSection,
+        h('div', { class: 'seg', role: 'group', 'aria-label': 'Art der Aufteilung' },
+          [['equal', 'Gleich'], ['exact', 'Beträge'], ['shares', 'Anteile']].map(([mode, label]) => h('button', {
+            type: 'button', 'aria-pressed': String(f.mode === mode),
+            onclick: () => { f.mode = mode; paintSplit(); refresh(); },
+          }, label))),
+        h('div', { class: 'split-list' }, rows),
+        splitStatus);
+    }
+
+    function draftValues() {
+      const values = dict();
+      for (const p of people) {
+        if (f.mode === 'equal' && f.equal.has(p.id)) values[p.id] = 1;
+        if (f.mode === 'shares' && f.shares[p.id] > 0) values[p.id] = f.shares[p.id];
+        if (f.mode === 'exact') { const c = parseAmount(f.exact[p.id]); if (c) values[p.id] = c; }
+      }
+      return values;
+    }
+
+    function balanceText(amount, given, done) {
+      if (!amount) return 'Erst oben den Betrag eintragen.';
+      if (given === amount) return '✓ ' + done;
+      return given < amount ? `Noch ${fmt(amount - given)} offen` : `${fmt(given - amount)} zu viel`;
+    }
+
+    function refresh() {
+      const amount = parseAmount(f.amount) || 0;
+      if (f.multiPay) {
+        const paid = sum(people.map(p => parseAmount(f.payAmounts[p.id]) || 0));
+        payStatus.textContent = balanceText(amount, paid, 'Passt genau');
+        payStatus.classList.toggle('ok', !!amount && paid === amount);
+      }
+      const values = draftValues();
+      const n = Object.keys(values).length;
+      if (f.mode === 'exact') {
+        const given = sum(Object.values(values));
+        splitStatus.textContent = balanceText(amount, given, 'Alles verteilt');
+        splitStatus.classList.toggle('ok', !!amount && given === amount);
+        return;
+      }
+      const shares = amount && n ? shareOf({ id: draftId, amount, split: { mode: f.mode, values } }) : dict();
+      for (const pid of Object.keys(previews)) previews[pid].textContent = shares[pid] ? fmt(shares[pid]) : '–';
+      splitStatus.textContent = !n ? 'Wähle aus, wer dabei war.' : f.mode === 'equal' ? `Geteilt durch ${n}` : `${sum(Object.values(values))} Anteile insgesamt`;
+      splitStatus.classList.toggle('ok', n > 0);
+    }
+
+    function fail(message, focus) {
+      errorEl.textContent = message;
+      errorEl.scrollIntoView({ block: 'nearest' });
+      if (focus) focus.focus();
+    }
+
+    function parseList(raw) {
+      const out = dict();
+      for (const p of people) {
+        if (!raw[p.id]) continue;
+        const c = parseAmount(raw[p.id]);
+        if (c == null) return `Den Betrag bei ${p.name} verstehe ich nicht.`;
+        if (c) out[p.id] = c;
+      }
+      return out;
+    }
+
+    function save(e) {
+      e.preventDefault();
+      const amount = parseAmount(f.amount);
+      if (!amount) return fail('Bitte gib einen Betrag ein, z. B. 12,50.', amountInput);
+      if (amount > MAX_CENTS) return fail('Maximal 100.000 € pro Ausgabe.', amountInput);
+      let paidBy = dict();
+      if (f.multiPay) {
+        paidBy = parseList(f.payAmounts);
+        if (typeof paidBy === 'string') return fail(paidBy);
+        const paid = sum(Object.values(paidBy));
+        if (paid !== amount) return fail(`Die Zahler ergeben ${fmt(paid)}, die Ausgabe ist aber ${fmt(amount)}.`);
+      } else {
+        paidBy[f.payer] = amount;
+      }
+      let values = draftValues();
+      if (f.mode === 'exact') {
+        values = parseList(f.exact);
+        if (typeof values === 'string') return fail(values);
+        const given = sum(Object.values(values));
+        if (given !== amount) return fail(`Die Beträge ergeben ${fmt(given)} statt ${fmt(amount)}.`);
+      }
+      if (!Object.keys(values).length) return fail('Wähle aus, wer dabei war.');
+      const rec = commit('items', {
+        id: draftId, kind: 'expense', amount,
+        date: DATE_RE.test(f.date) ? f.date : isoDate(),
+        created: ex ? ex.created : Date.now(),
+        by: ex ? ex.by : me,
+        title: f.title.trim() || CAT[f.category].label,
+        category: f.category,
+        paidBy,
+        split: { mode: f.mode, values },
+      });
+      if (!rec) return;
+      store.set(KEYS.date, rec.date);
+      dlg.close();
+      savedToast(ex ? 'Änderung gespeichert' : 'Ausgabe eingetragen');
+    }
+
+    function remove() {
+      if (!confirm(`„${ex.title}“ löschen?`)) return;
+      const before = { ...ex };
+      commit('items', { id: ex.id, kind: 'expense', deleted: true });
+      dlg.close();
+      toast('Ausgabe gelöscht', { label: 'Rückgängig', run: () => commit('items', before) });
+    }
+
+    const created = ex ? `Eingetragen ${ex.by && state.members[ex.by] ? 'von ' + nameOf(ex.by) + ' ' : ''}am ${STAMP_FMT.format(ex.created)}` : null;
+    fill(dlg, h('form', { class: 'sheet-form', novalidate: true, onsubmit: save },
+      h('header', { class: 'sheet-head' },
+        h('h2', { id: 'expenseDialogTitle' }, ex ? 'Ausgabe bearbeiten' : 'Neue Ausgabe'),
+        h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Schließen', onclick: () => dlg.close() }, icon('close', 20))),
+      h('div', { class: 'sheet-body' },
+        h('div', { class: 'amount-wrap' }, amountInput, h('span', { class: 'amount-cur', 'aria-hidden': 'true' }, '€')),
+        titleInput,
+        h('p', { class: 'label' }, 'Kategorie'), catRow,
+        h('label', { class: 'label', for: 'expenseDate' }, 'Datum'), dateInput,
+        h('p', { class: 'label' }, 'Bezahlt von'), paySection,
+        h('p', { class: 'label' }, 'Aufteilen auf'), splitSection,
+        created ? h('p', { class: 'meta-line' }, created) : null,
+        errorEl),
+      h('footer', { class: 'sheet-foot' },
+        ex ? h('button', { type: 'button', class: 'btn btn-danger', onclick: remove }, 'Löschen') : null,
+        h('button', { type: 'submit', class: 'btn btn-primary btn-grow' }, ex ? 'Speichern' : 'Eintragen'))));
+    dlg.setAttribute('aria-labelledby', 'expenseDialogTitle');
+    paintPay();
+    paintSplit();
+    refresh();
+    fitAmount(amountInput);
+    dlg.showModal();
+    paintCategories();
+    if (!ex) amountInput.focus();
+  }
+
+  function savedToast(message) {
+    if (sync.mode === 'local') toast(message, { label: 'Stand teilen', run: shareState });
+    else toast(message);
+  }
+
+  // --- Rückzahlung erfassen ---------------------------------------------------------
+  function openPayment({ id, from, to, amount } = {}) {
+    const dlg = $('#paymentDialog');
+    const ex = id ? state.items[id] : null;
+    if (id && (!ex || ex.deleted || ex.kind !== 'payment')) return;
+    const me = currentMe();
+    const people = members();
+    if (ex) for (const pid of [ex.from, ex.to]) if (!people.some(p => p.id === pid)) people.push({ id: pid, name: nameOf(pid) });
+    const f = { from: ex ? ex.from : from || me || people[0].id, to: ex ? ex.to : to || '', amount: ex ? toInput(ex.amount) : amount ? toInput(amount) : '', date: ex ? ex.date : isoDate() };
+    if (!f.to || f.to === f.from) f.to = (people.find(p => p.id !== f.from) || {}).id || '';
+    const draftId = ex ? ex.id : uid();
+    const fromRow = h('div', { class: 'chips' });
+    const toRow = h('div', { class: 'chips' });
+    const errorEl = h('p', { class: 'form-error', role: 'alert' });
+    const amountInput = h('input', { class: 'amount-input num', inputmode: 'decimal', autocomplete: 'off', placeholder: '0,00', value: f.amount, 'aria-label': 'Betrag in Euro', oninput: e => { f.amount = e.target.value; fitAmount(e.target); } });
+
+    function paint() {
+      fill(fromRow, people.map(p => h('button', {
+        type: 'button', class: 'chip', 'aria-pressed': String(f.from === p.id),
+        onclick: () => { f.from = p.id; if (f.to === p.id) f.to = (people.find(q => q.id !== p.id) || {}).id || ''; paint(); },
+      }, avatar(p.id, 28), p.name)));
+      fill(toRow, people.map(p => h('button', {
+        type: 'button', class: 'chip', 'aria-pressed': String(f.to === p.id), disabled: p.id === f.from,
+        onclick: () => { f.to = p.id; paint(); },
+      }, avatar(p.id, 28), p.name)));
+    }
+
+    function save(e) {
+      e.preventDefault();
+      const cents = parseAmount(f.amount);
+      if (!cents || cents > MAX_CENTS) { errorEl.textContent = 'Bitte gib einen gültigen Betrag ein.'; amountInput.focus(); return; }
+      if (!f.to || f.to === f.from) { errorEl.textContent = 'Wähle aus, wer das Geld bekommen hat.'; return; }
+      const rec = commit('items', { id: draftId, kind: 'payment', from: f.from, to: f.to, amount: cents, date: f.date, created: ex ? ex.created : Date.now(), by: ex ? ex.by : me });
+      if (!rec) return;
+      dlg.close();
+      savedToast(ex ? 'Zahlung gespeichert' : 'Zahlung eingetragen');
+    }
+
+    function remove() {
+      if (!confirm('Diese Zahlung löschen?')) return;
+      const before = { ...ex };
+      commit('items', { id: ex.id, kind: 'payment', deleted: true });
+      dlg.close();
+      toast('Zahlung gelöscht', { label: 'Rückgängig', run: () => commit('items', before) });
+    }
+
+    fill(dlg, h('form', { class: 'sheet-form', novalidate: true, onsubmit: save },
+      h('header', { class: 'sheet-head' },
+        h('h2', { id: 'paymentDialogTitle' }, ex ? 'Zahlung bearbeiten' : 'Zahlung eintragen'),
+        h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Schließen', onclick: () => dlg.close() }, icon('close', 20))),
+      h('div', { class: 'sheet-body' },
+        h('p', { class: 'muted small' }, 'Wenn jemand Geld zurückgegeben hat, z. B. per PayPal oder bar.'),
+        h('p', { class: 'label' }, 'Wer hat gezahlt?'), fromRow,
+        h('p', { class: 'label' }, 'An wen?'), toRow,
+        h('div', { class: 'amount-wrap' }, amountInput, h('span', { class: 'amount-cur', 'aria-hidden': 'true' }, '€')),
+        errorEl),
+      h('footer', { class: 'sheet-foot' },
+        ex ? h('button', { type: 'button', class: 'btn btn-danger', onclick: remove }, 'Löschen') : null,
+        h('button', { type: 'submit', class: 'btn btn-primary btn-grow' }, 'Speichern'))));
+    dlg.setAttribute('aria-labelledby', 'paymentDialogTitle');
+    paint();
+    fitAmount(amountInput);
+    dlg.showModal();
+  }
+
+  function openKeyDialog(wrong) {
+    const dlg = $('#keyDialog');
+    if (dlg.open) dlg.close();
+    const input = h('input', { class: 'field', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', placeholder: 'Zugangscode', 'aria-label': 'Zugangscode' });
+    const submit = e => {
+      e.preventDefault();
+      const key = input.value.trim();
+      if (!key) return;
+      accessKey = key;
+      store.set(KEYS.key, key);
+      dlg.close();
+      sync.mode = 'offline';
+      render();
+      syncNow();
+    };
+    fill(dlg, h('form', { class: 'sheet-form', onsubmit: submit },
+      h('header', { class: 'sheet-head' }, h('h2', { id: 'keyDialogTitle' }, 'Zugangscode')),
+      h('div', { class: 'sheet-body' },
+        h('p', { class: 'muted', style: 'margin-bottom:14px' }, wrong
+          ? 'Der Code passt nicht. Am einfachsten öffnest du den Einladungslink aus eurer Gruppe – da steckt der Code schon drin.'
+          : 'Diese Abrechnung ist geschützt. Öffne den Einladungslink aus eurer Gruppe oder gib den Zugangscode ein.'),
+        input),
+      h('footer', { class: 'sheet-foot' }, h('button', { type: 'submit', class: 'btn btn-primary btn-grow' }, 'Weiter'))));
+    dlg.setAttribute('aria-labelledby', 'keyDialogTitle');
+    dlg.showModal();
+    input.focus();
+  }
+
+  // --- Teilen, Backup, Zurücksetzen ------------------------------------------------
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch { /* Fallback unten */ }
+    try {
+      const ta = h('textarea', { style: 'position:fixed;top:0;left:0;opacity:0' });
+      ta.value = text;
+      document.body.append(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch { return false; }
+  }
+
+  // Teilen-Menü des Handys (WhatsApp & Co.), sonst in die Zwischenablage.
+  async function shareOrCopy(text) {
+    if (navigator.share) {
+      try { await navigator.share({ text }); return true; } catch (err) { if (err && err.name === 'AbortError') return false; }
+    }
+    if (await copyText(text)) { toast('Kopiert – jetzt z. B. in WhatsApp einfügen'); return true; }
+    window.prompt('Zum Kopieren:', text);
+    return true;
+  }
+
+  async function stateLink() {
+    return pageUrl() + '#g=' + (await encodeState(state));
+  }
+
+  function inviteLink() {
+    return pageUrl() + (accessKey ? '#k=' + encodeURIComponent(accessKey) : '');
+  }
+
+  function summaryText() {
+    const s = summarize(state);
+    const transfers = settle(s.bal);
+    const count = members().length;
+    const lines = [`${state.meta.group.name} – Abrechnung 💸`];
+    if (!s.count) lines.push('Noch keine Ausgaben eingetragen.');
+    else lines.push(`Gesamt: ${fmt(s.total)} · ${s.count} ${s.count === 1 ? 'Ausgabe' : 'Ausgaben'} · Ø ${fmt(Math.round(s.total / Math.max(1, count)))} pro Kopf`);
+    lines.push('');
+    if (transfers.length) {
+      lines.push('Wer zahlt wem:');
+      for (const t of transfers) {
+        const paypal = state.members[t.to] && state.members[t.to].paypal;
+        lines.push(`• ${nameOf(t.from)} → ${nameOf(t.to)}: ${fmt(t.amount)}` + (paypal ? ` (${paypalLink(paypal, t.amount)})` : ''));
+      }
+    } else if (s.count) {
+      lines.push('Alle sind quitt 🎉');
+    }
+    lines.push('', `Stand: ${STAMP_FMT.format(Date.now())} Uhr`);
+    return lines.join('\n');
+  }
+
+  async function shareSummary() {
+    let link = '';
+    try { link = sync.mode === 'local' ? await stateLink() : inviteLink(); } catch { link = pageUrl(); }
+    const ok = await shareOrCopy(summaryText() + '\n\nAlle Details: ' + link);
+    if (ok && sync.mode === 'local') { store.del(KEYS.dirty); render(); }
+  }
+
+  async function shareState() {
+    let url;
+    try { url = await stateLink(); } catch { toast('Der Link konnte nicht erstellt werden.'); return; }
+    const n = activeItems().length;
+    const ok = await shareOrCopy(`Mein Stand für „${state.meta.group.name}“ (${n} ${n === 1 ? 'Eintrag' : 'Einträge'}, Datenstand ${fingerprint(state)}). Link öffnen, dann hast du alles:\n${url}`);
+    if (ok) { store.del(KEYS.dirty); render(); }
+  }
+
+  async function shareInvite() {
+    await shareOrCopy(`Hier tragen wir die Ausgaben für „${state.meta.group.name}“ ein:\n${inviteLink()}`);
+  }
+
+  function exportBackup() {
+    const blob = new Blob([JSON.stringify(exportPayload(state), null, 2)], { type: 'application/json' });
+    const name = (state.meta.group.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'abrechnung') + '-' + isoDate() + '.json';
+    const a = h('a', { href: URL.createObjectURL(blob), download: name });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
+  async function importBackup(e) {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    e.target.blur();
+    if (!file) return;
+    try {
+      const changed = mergeState(state, sanitizeState(JSON.parse(await file.text())));
+      persist();
+      render();
+      scheduleSync();
+      toast(changed.total ? `${changed.total} Änderungen übernommen` : 'Nichts Neues in der Datei');
+    } catch {
+      toast('Die Datei konnte nicht gelesen werden.');
+    }
+  }
+
+  function resetLocal() {
+    if (!confirm('Wirklich alle Einträge auf diesem Gerät löschen? Was du nicht geteilt hast, ist dann weg.')) return;
+    for (const k of [KEYS.state, KEYS.me, KEYS.dirty, KEYS.date, KEYS.setup]) store.del(k);
+    state = baseState();
+    view = 'overview';
+    render();
+    toast('Alles zurückgesetzt');
+  }
+
+  // Link-Inhalte übernehmen: #k=Zugangscode (Server), #g=geteilter Stand
+  async function readHash() {
+    const params = new URLSearchParams(location.hash.slice(1));
+    const key = params.get('k');
+    const data = params.get('g');
+    if (!key && !data) return;
+    history.replaceState(null, '', location.pathname + location.search);
+    if (key) { accessKey = key; store.set(KEYS.key, key); }
+    if (!data) return;
+    try {
+      const changed = mergeState(state, await decodeState(data));
+      persist();
+      render();
+      toast(changed.items ? `Link übernommen: ${changed.items} ${changed.items === 1 ? 'Eintrag' : 'Einträge'} neu oder geändert` : changed.total ? 'Link übernommen' : 'Du warst schon auf dem neuesten Stand');
+    } catch {
+      toast('Der Link ist unvollständig oder beschädigt.');
+    }
+  }
+
+  // --- Start ----------------------------------------------------------------------
+  function init() {
+    for (const btn of document.querySelectorAll('[data-view]')) {
+      btn.addEventListener('click', () => { view = btn.dataset.view; render(); window.scrollTo(0, 0); });
+    }
+    $('#fab').addEventListener('click', () => openExpense());
+    $('#syncPill').addEventListener('click', () => {
+      if (sync.mode === 'locked') return openKeyDialog(false);
+      view = 'group';
+      render();
+      const card = $('#syncCard');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    document.addEventListener('focusout', () => setTimeout(() => { if (pendingRender) render(); }, 0));
+    // Ein Link kann auch in einem Tab landen, in dem die Seite schon offen ist – dann lädt sie nicht neu.
+    window.addEventListener('hashchange', async () => {
+      const keyBefore = accessKey;
+      await readHash();
+      if (accessKey !== keyBefore && sync.mode === 'locked') {
+        const dlg = $('#keyDialog');
+        if (dlg.open) dlg.close();
+        sync.mode = 'offline';
+        render();
+      }
+      scheduleSync();
+    });
+    window.addEventListener('storage', e => {
+      if (e.key !== KEYS.state || !e.newValue) return;
+      try { if (mergeState(state, sanitizeState(JSON.parse(e.newValue))).total) render(); } catch { /* ignorieren */ }
+    });
+    render();
+    readHash().then(detectServer);
+  }
+
+  window.ADE = {
+    parseAmount, shareOf, summarize, settle, sanitize, sanitizeState, mergeState, encodeState, decodeState,
+    guessCategory, fingerprint, get state() { return state; }, get sync() { return sync; },
+  };
+
+  init();
+})();
+</script>
+</body>
+</html>
